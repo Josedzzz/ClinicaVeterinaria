@@ -18,6 +18,10 @@ public class ModelFactoryController {
         private final static ModelFactoryController eINSTANCE = new ModelFactoryController();
     }
 
+    public static ModelFactoryController getInstance() {
+        return SingletonHolder.eINSTANCE;
+    }
+
     public ModelFactoryController() {
         System.out.println("Invocacion de la clase singleton");
         incializarDatos();
@@ -38,4 +42,17 @@ public class ModelFactoryController {
         clinica.getListaVeterinarios()[2] = veterinario3;
         clinica.getListaVeterinarios()[3] = veterinario4;
     }
+
+    //FUNCIONES PARA EL LOGIN ----------------------------------------------------------------------
+
+    /**
+     * Verifica que el veterinario exista
+     * @param nombre
+     * @param codigo
+     * @return
+     */
+    public boolean verificarVeterinario(String nombre, String codigo) {
+        return clinica.verificarVeterinario(nombre, codigo);
+    }
+
 }

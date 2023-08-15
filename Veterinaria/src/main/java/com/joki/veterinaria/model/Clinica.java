@@ -50,4 +50,21 @@ public class Clinica {
     public void setListaFacturas(ArrayList<Factura> listaFacturas) {
         this.listaFacturas = listaFacturas;
     }
+
+    //FUNCIONES LOGIN ------------------------------------------------------------------------------
+
+    /**
+     * Retorna tru si existe un veterinario con el nombre y codigo
+     * @param nombre
+     * @param codigo
+     * @return
+     */
+    public boolean verificarVeterinario(String nombre, String codigo) {
+        for (Veterinario veterinario : listaVeterinarios) {
+            if (veterinario.getNombre().equals(nombre) && veterinario.getCodigo().equals(codigo)) {
+                return true;
+            }
+        }
+        return false;
+    }
 }
