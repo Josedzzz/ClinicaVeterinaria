@@ -5,14 +5,12 @@ import java.time.LocalDate;
 public class Factura {
     private double costo;
     private String observaciones;
-    private LocalDate fechaGenerada;
     private Cliente cliente;
     private AtencionVeterinaria atencionVeterinaria;
 
-    public Factura(double costo, String observaciones, LocalDate fechaGenerada, Cliente cliente, AtencionVeterinaria atencionVeterinaria) {
+    public Factura(double costo, String observaciones, Cliente cliente, AtencionVeterinaria atencionVeterinaria) {
         this.costo = costo;
         this.observaciones = observaciones;
-        this.fechaGenerada = fechaGenerada;
         this.cliente = cliente;
         this.atencionVeterinaria = atencionVeterinaria;
     }
@@ -31,14 +29,6 @@ public class Factura {
 
     public void setObservaciones(String observaciones) {
         this.observaciones = observaciones;
-    }
-
-    public LocalDate getFechaGenerada() {
-        return fechaGenerada;
-    }
-
-    public void setFechaGenerada(LocalDate fechaGenerada) {
-        this.fechaGenerada = fechaGenerada;
     }
 
     public Cliente getCliente() {
