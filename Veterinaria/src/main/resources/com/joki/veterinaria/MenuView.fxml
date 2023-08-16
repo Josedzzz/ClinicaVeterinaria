@@ -286,6 +286,75 @@
                   </AnchorPane>
               </content>
             </Tab>
+            <Tab text="Historial clínico">
+              <content>
+                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" style="-fx-background-color: #f2fdff;">
+                     <children>
+                        <Label layoutX="14.0" layoutY="14.0" text="Revisar historial clínico de una mascota" textFill="#228cd8">
+                           <font>
+                              <Font name="Ubuntu Bold Italic" size="18.0" />
+                           </font>
+                        </Label>
+                        <Separator layoutY="46.0" prefHeight="0.0" prefWidth="700.0" style="-fx-background-color: #228cd8;" />
+                        <TextField layoutX="135.0" layoutY="107.0" promptText="Cédula cliente" style="-fx-background-color: transparent; -fx-border-color: #228cd8; -fx-border-width: 0px 0px 2px 0px;">
+                           <font>
+                              <Font name="Ubuntu Bold Italic" size="14.0" />
+                           </font>
+                        </TextField>
+                        <TextField layoutX="382.0" layoutY="107.0" promptText="Nombre mascota" style="-fx-background-color: transparent; -fx-border-color: #228cd8; -fx-border-width: 0px 0px 2px 0px;">
+                           <font>
+                              <Font name="Ubuntu Bold Italic" size="14.0" />
+                           </font>
+                        </TextField>
+                        <Button layoutX="253.0" layoutY="222.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="194.0" style="-fx-background-color: #228cd8;" text="Generar historial clínico" textFill="#f2fdff">
+                           <font>
+                              <Font name="Ubuntu Bold Italic" size="14.0" />
+                           </font>
+                        </Button>
+                     </children>
+                  </AnchorPane>
+              </content>
+            </Tab>
+            <Tab text="FIltrar citas">
+              <content>
+                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" style="-fx-background-color: #228cd8;">
+                     <children>
+                        <Label layoutX="14.0" layoutY="14.0" text="Filtrar citas por fechas" textFill="#f2fdff">
+                           <font>
+                              <Font name="Ubuntu Bold Italic" size="18.0" />
+                           </font>
+                        </Label>
+                        <Separator layoutY="45.0" prefHeight="0.0" prefWidth="700.0" style="-fx-background-color: #f2fdff;" />
+                        <TableView layoutX="41.0" layoutY="137.0" prefHeight="250.0" prefWidth="619.0">
+                           <columns>
+                              <TableColumn prefWidth="97.0" text="Cliente" />
+                              <TableColumn prefWidth="139.0" text="Nombre mascota" />
+                              <TableColumn prefWidth="178.0" text="Veterinario encargado" />
+                              <TableColumn prefWidth="74.0" text="Fecha" />
+                              <TableColumn prefWidth="130.0" text="Estado atención" />
+                           </columns>
+                        </TableView>
+                        <Label layoutX="41.0" layoutY="80.0" text="Fecha inicial:" textFill="#f2fdff">
+                           <font>
+                              <Font name="Ubuntu Bold Italic" size="14.0" />
+                           </font>
+                        </Label>
+                        <Label layoutX="350.0" layoutY="80.0" text="Fecha final:" textFill="#f2fdff">
+                           <font>
+                              <Font name="Ubuntu Bold Italic" size="14.0" />
+                           </font>
+                        </Label>
+                        <DatePicker layoutX="133.0" layoutY="76.0" />
+                        <DatePicker layoutX="438.0" layoutY="76.0" />
+                        <Button layoutX="275.0" layoutY="416.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="150.0" style="-fx-background-color: #f3fdff;" text="Reiniciar" textFill="#228cd8">
+                           <font>
+                              <Font name="Ubuntu Bold Italic" size="14.0" />
+                           </font>
+                        </Button>
+                     </children>
+                  </AnchorPane>
+              </content>
+            </Tab>
         </tabs>
       </TabPane>
    </center>
