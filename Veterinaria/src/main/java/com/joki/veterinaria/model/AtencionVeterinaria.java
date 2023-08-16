@@ -3,12 +3,14 @@ package com.joki.veterinaria.model;
 import java.time.LocalDate;
 
 public class AtencionVeterinaria {
+    private Cliente cliente;
     private Mascota mascota;
     private Veterinario veterinario;
     private EstadoAtencion estadoAtencion;
     private LocalDate fechaAtencion;
 
-    public AtencionVeterinaria(Mascota mascota, Veterinario veterinario, EstadoAtencion estadoAtencion, LocalDate fechaAtencion) {
+    public AtencionVeterinaria(Cliente cliente, Mascota mascota, Veterinario veterinario, EstadoAtencion estadoAtencion, LocalDate fechaAtencion) {
+        this.cliente = cliente;
         this.mascota = mascota;
         this.veterinario = veterinario;
         this.estadoAtencion = estadoAtencion;
@@ -17,6 +19,14 @@ public class AtencionVeterinaria {
 
     public AtencionVeterinaria() {
 
+    }
+
+    public Cliente getCliente() {
+        return cliente;
+    }
+
+    public void setCliente(Cliente cliente) {
+        this.cliente = cliente;
     }
 
     public Mascota getMascota() {
