@@ -32,6 +32,7 @@ public class LoginController implements Initializable {
     //Variables auxiliares
     private Application application;
     private Stage stage;
+    private Veterinario veterinarioLogin;
     ModelFactoryController mfm = ModelFactoryController.getInstance();
 
     @Override
@@ -98,7 +99,8 @@ public class LoginController implements Initializable {
      * @param codigo
      */
     private void iniciarSesion(String nombre, String codigo) throws IOException {
-        if (mfm.verificarVeterinario(nombre, codigo)) {
+        veterinarioLogin = mfm.darVeterinario(nombre, codigo);
+        if (veterinarioLogin != null) {
             FXMLLoader loader = new FXMLLoader();
             loader.setLocation(Application.class.getResource("/com/joki/veterinaria/MenuView.fxml"));
             BorderPane borderPane = (BorderPane) loader.load();
@@ -108,7 +110,7 @@ public class LoginController implements Initializable {
             Stage stage = new Stage();
             stage.setTitle("Menu");
             stage.setScene(scene);
-            controller.init(stage, this);
+            controller.init(stage, this, veterinarioLogin);
             stage.show();
             this.stage.close();
         } else {

@@ -46,13 +46,13 @@ public class ModelFactoryController {
     //FUNCIONES PARA EL LOGIN ----------------------------------------------------------------------
 
     /**
-     * Verifica que el veterinario exista
+     * Verifica que el veterinario exista y lo retorna
      * @param nombre
      * @param codigo
      * @return
      */
-    public boolean verificarVeterinario(String nombre, String codigo) {
-        return clinica.verificarVeterinario(nombre, codigo);
+    public Veterinario darVeterinario(String nombre, String codigo) {
+        return clinica.darVeterinario(nombre, codigo);
     }
 
 }

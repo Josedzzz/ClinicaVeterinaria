@@ -67,18 +67,19 @@ public class Clinica {
     //FUNCIONES LOGIN ------------------------------------------------------------------------------
 
     /**
-     * Retorna tru si existe un veterinario con el nombre y codigo
+     * Retorna el veterinario si encuentra los campos
      * @param nombre
      * @param codigo
      * @return
      */
-    public boolean verificarVeterinario(String nombre, String codigo) {
+    public Veterinario darVeterinario(String nombre, String codigo) {
+        Veterinario veterinarioEncontrado = null;
         for (Veterinario veterinario : listaVeterinarios) {
             if (veterinario.getNombre().equals(nombre) && veterinario.getCodigo().equals(codigo)) {
-                return true;
+                veterinarioEncontrado = veterinario;
             }
         }
-        return false;
+        return veterinarioEncontrado;
     }
 
     public Cliente obtenerCliente(String cedula){
