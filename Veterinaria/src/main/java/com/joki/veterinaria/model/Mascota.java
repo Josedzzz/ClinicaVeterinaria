@@ -6,13 +6,15 @@ public class Mascota {
     private SexoMascota sexo;
     private String raza;
     private TipoMascota tipo;
+    private Cliente duenio;
 
-    public Mascota(String nombre, int edad, SexoMascota sexo, String raza, TipoMascota tipo) {
+    public Mascota(String nombre, int edad, SexoMascota sexo, String raza, TipoMascota tipo, Cliente duenio) {
         this.nombre = nombre;
         this.edad = edad;
         this.sexo = sexo;
         this.raza = raza;
         this.tipo = tipo;
+        this.duenio = duenio;
     }
 
     public Mascota() {
@@ -57,5 +59,13 @@ public class Mascota {
 
     public void setTipo(TipoMascota tipo) {
         this.tipo = tipo;
+    }
+
+    public Cliente getDuenio() {
+        return duenio;
+    }
+
+    public void setDuenio(Cliente duenio) {
+        this.duenio = duenio;
     }
 }

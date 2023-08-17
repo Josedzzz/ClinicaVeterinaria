@@ -1,5 +1,8 @@
 package com.joki.veterinaria.model;
 
+import com.joki.veterinaria.exceptions.ClienteNoRegistradoException;
+import com.joki.veterinaria.exceptions.ClienteYaExistenteException;
+
 import java.util.ArrayList;
 
 public class Clinica {
@@ -7,12 +10,14 @@ public class Clinica {
     private Veterinario[] listaVeterinarios;
     private ArrayList<AtencionVeterinaria> listaAtencionVeterinaria;
     private ArrayList<Factura> listaFacturas;
+    private ArrayList<Cliente> listaClientes;
 
     public Clinica(String nombre) {
         this.nombre = nombre;
         this.listaVeterinarios = new Veterinario[4];
         this.listaAtencionVeterinaria = new ArrayList<AtencionVeterinaria>();
         this.listaFacturas = new ArrayList<Factura>();
+        this.listaClientes = new ArrayList<Cliente>();
     }
 
     public Clinica() {
@@ -51,6 +56,14 @@ public class Clinica {
         this.listaFacturas = listaFacturas;
     }
 
+    public ArrayList<Cliente> getListaClientes() {
+        return listaClientes;
+    }
+
+    public void setListaClientes(ArrayList<Cliente> listaClientes) {
+        this.listaClientes = listaClientes;
+    }
+
     //FUNCIONES LOGIN ------------------------------------------------------------------------------
 
     /**
@@ -81,21 +94,21 @@ public class Clinica {
     public boolean crearCliente(String nombre, String correo, String telefono, String cedula, String Direccion, ArrayList listaMascotas) throws ClienteYaExistenteException {
         boolean fueCreado = false;
         Cliente clienteAsociado = obtenerCliente(cedula);
-    if(clienteAsociado != null){
-        throw new ClienteYaExistenteException("El cliente ya existe");
-    }else {
-        Cliente clienteNuevo = new Cliente(nombre,correo,telefono, cedula, Direccion,listaMascotas);
-        listaClientes.add(clienteNuevo);
-        fueCreado = true;
-    }
-       return fueCreado;
+        if (clienteAsociado != null){
+            throw new ClienteYaExistenteException("El cliente ya existe");
+        } else {
+            Cliente clienteNuevo = new Cliente(nombre,correo,telefono, cedula, Direccion,listaMascotas);
+            listaClientes.add(clienteNuevo);
+            fueCreado = true;
+        }
+        return fueCreado;
     }
 
     public void actualizarCliente(String nombre, String correo, String telefono, String cedula, String direccion, ArrayList listaMascotas) throws ClienteNoRegistradoException{
         Cliente clienteEncontrado = obtenerCliente(cedula);
-        if(clienteEncontrado == null){
+        if (clienteEncontrado == null) {
             throw new ClienteNoRegistradoException("El cliente no esta registrado");
-        }else{
+        } else {
             clienteEncontrado.setNombre(nombre);
             clienteEncontrado.setCorreo(correo);
             clienteEncontrado.setTelefono(telefono);
@@ -105,16 +118,16 @@ public class Clinica {
         }
     }
 
-    public void eliminarCliente(String cedula) throws ClienteNoRegistradoException{
+    public void eliminarCliente(String cedula) throws ClienteNoRegistradoException {
         Cliente clientePorEliminar = null;
         for (Cliente cliente : listaClientes) {
             if (cliente.getCedula().equals(cedula)) {
                 clientePorEliminar = cliente;
             }
         }
-        if(clientePorEliminar != null){
+        if (clientePorEliminar != null){
             listaClientes.remove(clientePorEliminar);
-        }else{
+        } else {
             throw new ClienteNoRegistradoException("El cliente con cedula" + cedula + "no esta registrado");
         }
     }
