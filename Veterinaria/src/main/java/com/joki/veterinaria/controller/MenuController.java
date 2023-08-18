@@ -1,7 +1,10 @@
 package com.joki.veterinaria.controller;
 
 import com.joki.veterinaria.application.Application;
-import com.joki.veterinaria.model.Veterinario;
+import com.joki.veterinaria.model.*;
+import javafx.beans.property.ReadOnlyIntegerWrapper;
+import javafx.beans.property.ReadOnlyListProperty;
+import javafx.beans.property.ReadOnlyStringWrapper;
 import javafx.fxml.Initializable;
 import javafx.stage.Stage;
 import java.net.URL;
@@ -20,6 +23,7 @@ public class MenuController implements Initializable {
     ModelFactoryController mfm = ModelFactoryController.getInstance();
 
     //VARIABLES PESTANIA CLIENTES --------------------------------------------------------------------------------
+
     @FXML
     private Button btnActualizarCliente;
 
@@ -36,22 +40,22 @@ public class MenuController implements Initializable {
     private Button btnNuevoCliente;
 
     @FXML
-    private TableColumn<?, ?> columnCedulaCliente;
+    private TableColumn<Cliente, String> columnCedulaCliente;
 
     @FXML
-    private TableColumn<?, ?> columnCorreoCliente;
+    private TableColumn<Cliente, String> columnCorreoCliente;
 
     @FXML
-    private TableColumn<?, ?> columnDireccionCliente;
+    private TableColumn<Cliente, String> columnDireccionCliente;
 
     @FXML
-    private TableColumn<?, ?> columnNombreCliente;
+    private TableColumn<Cliente, String> columnNombreCliente;
 
     @FXML
-    private TableColumn<?, ?> columnTelefonoCliente;
+    private TableColumn<Cliente, String> columnTelefonoCliente;
 
     @FXML
-    private TableView<?> tableViewCliente;
+    private TableView<Cliente> tableViewCliente;
 
     @FXML
     private TextField txtCedulaCliente;
@@ -83,31 +87,31 @@ public class MenuController implements Initializable {
     private Button btnNuevaMascota;
 
     @FXML
-    private TableColumn<?, ?> columnCedulaMascota;
+    private TableColumn<Mascota, String> columnCedulaMascota;
 
     @FXML
-    private TableColumn<?, ?> columnEdadMascota;
+    private TableColumn<Mascota, String> columnEdadMascota;
 
     @FXML
-    private TableColumn<?, ?> columnNombreMascota;
+    private TableColumn<Mascota, String> columnNombreMascota;
 
     @FXML
-    private TableColumn<?, ?> columnRazaMascota;
+    private TableColumn<Mascota, String> columnRazaMascota;
 
     @FXML
-    private TableColumn<?, ?> columnSexoMascota;
+    private TableColumn<Mascota, String> columnSexoMascota;
 
     @FXML
-    private TableColumn<?, ?> columnTipoMascota;
+    private TableColumn<Mascota, String> columnTipoMascota;
 
     @FXML
-    private ComboBox<?> comboBoxSexoMascota;
+    private ComboBox<SexoMascota> comboBoxSexoMascota;
 
     @FXML
-    private ComboBox<?> comboBoxTipoMascota;
+    private ComboBox<TipoMascota> comboBoxTipoMascota;
 
     @FXML
-    private TableView<?> tableViewMascota;
+    private TableView<Mascota> tableViewMascota;
 
     @FXML
     private TextField txtCedulaMascota;
@@ -147,45 +151,45 @@ public class MenuController implements Initializable {
     private Button btnCancelarCitaAtencion;
 
     @FXML
-    private TableColumn<?, ?> columnClienteAtencion;
+    private TableColumn<AtencionVeterinaria, String> columnClienteAtencion;
 
     @FXML
-    private TableColumn<?, ?> columnEstadoAtencion;
+    private TableColumn<AtencionVeterinaria, String> columnEstadoAtencion;
 
     @FXML
-    private TableColumn<?, ?> columnFechaAtencion;
+    private TableColumn<AtencionVeterinaria, String> columnFechaAtencion;
 
     @FXML
-    private TableColumn<?, ?> columnMascotaAtencion;
+    private TableColumn<AtencionVeterinaria, String> columnMascotaAtencion;
 
     @FXML
-    private TableColumn<?, ?> columnVeterinarioAtencion;
+    private TableColumn<AtencionVeterinaria, String> columnVeterinarioAtencion;
 
     @FXML
-    private TableView<?> tableViewAtenciones;
+    private TableView<AtencionVeterinaria> tableViewAtenciones;
 
     //PESTANIA LISTA FACTURAS -------------------------------------------------------------------------
 
     @FXML
-    private TableColumn<?, ?> columnClienteFactura;
+    private TableColumn<Factura, String> columnClienteFactura;
 
     @FXML
-    private TableColumn<?, ?> columnCostoFactura;
+    private TableColumn<Factura, String> columnCostoFactura;
 
     @FXML
-    private TableColumn<?, ?> columnFechaFactura;
+    private TableColumn<Factura, String> columnFechaFactura;
 
     @FXML
-    private TableColumn<?, ?> columnMascotaFactura;
+    private TableColumn<Factura, String> columnMascotaFactura;
 
     @FXML
-    private TableColumn<?, ?> columnObservacionesFactura;
+    private TableColumn<Factura, String> columnObservacionesFactura;
 
     @FXML
-    private TableColumn<?, ?> columnVeterinarioFactura;
+    private TableColumn<Factura, String> columnVeterinarioFactura;
 
     @FXML
-    private TableView<?> tableViewFacturas;
+    private TableView<Factura> tableViewFacturas;
 
     //PESTANIA HISTORIAL CLINICO --------------------------------------------------------------------
 
@@ -207,19 +211,19 @@ public class MenuController implements Initializable {
     private Button btnReiniciarFiltrar;
 
     @FXML
-    private TableColumn<?, ?> columnClienteFiltrar;
+    private TableColumn<AtencionVeterinaria, String> columnClienteFiltrar;
 
     @FXML
-    private TableColumn<?, ?> columnEstadoAtencionFiltrar;
+    private TableColumn<AtencionVeterinaria, String> columnEstadoAtencionFiltrar;
 
     @FXML
-    private TableColumn<?, ?> columnFechaFiltrar;
+    private TableColumn<AtencionVeterinaria, String> columnFechaFiltrar;
 
     @FXML
-    private TableColumn<?, ?> columnVeterinarioFiltrar;
+    private TableColumn<AtencionVeterinaria, String> columnVeterinarioFiltrar;
 
     @FXML
-    private TableColumn<?, ?> columnMascotaFiltrar;
+    private TableColumn<AtencionVeterinaria, String> columnMascotaFiltrar;
 
     @FXML
     private DatePicker datePickerFinalFiltrar;
@@ -228,7 +232,7 @@ public class MenuController implements Initializable {
     private DatePicker datePickerIncialFiltrar;
 
     @FXML
-    private TableView<?> tableViewFiltrar;
+    private TableView<AtencionVeterinaria> tableViewFiltrar;
 
     //Declaro variables auxiliares
     private Stage stage;
@@ -238,7 +242,51 @@ public class MenuController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+        //Datos de la tableViewCliente
+        this.columnNombreCliente.setCellValueFactory(e -> new ReadOnlyStringWrapper(e.getValue().getNombre()));
+        this.columnCorreoCliente.setCellValueFactory(e -> new ReadOnlyStringWrapper(e.getValue().getCorreo()));
+        this.columnCedulaCliente.setCellValueFactory(e -> new ReadOnlyStringWrapper(e.getValue().getCedula()));
+        this.columnTelefonoCliente.setCellValueFactory(e -> new ReadOnlyStringWrapper(e.getValue().getTelefono()));
+        this.columnDireccionCliente.setCellValueFactory(e -> new ReadOnlyStringWrapper(e.getValue().getDireccion()));
 
+        //Datos en la tableViewMascota
+        this.columnNombreMascota.setCellValueFactory(e -> new ReadOnlyStringWrapper(e.getValue().getNombre()));
+        this.columnEdadMascota.setCellValueFactory(e -> {
+            int edadMascota = e.getValue().getEdad();
+            String edad = String.valueOf(edadMascota);
+            return new ReadOnlyStringWrapper(edad);
+        });
+        this.columnRazaMascota.setCellValueFactory(e -> new ReadOnlyStringWrapper(e.getValue().getRaza()));
+        this.columnSexoMascota.setCellValueFactory(e -> new ReadOnlyStringWrapper(e.getValue().getSexo().toString()));
+        this.columnCedulaMascota.setCellValueFactory(e -> new ReadOnlyStringWrapper(e.getValue().getDuenio().getCedula()));
+        this.columnTipoMascota.setCellValueFactory(e -> new ReadOnlyStringWrapper(e.getValue().getTipo().toString()));
+
+        //Datos en la tableViewAtenciones
+        this.columnClienteAtencion.setCellValueFactory(e -> new ReadOnlyStringWrapper(e.getValue().getCliente().getCedula()));
+        this.columnMascotaAtencion.setCellValueFactory(e -> new ReadOnlyStringWrapper(e.getValue().getMascota().getNombre()));
+        this.columnVeterinarioAtencion.setCellValueFactory(e -> new ReadOnlyStringWrapper(e.getValue().getVeterinario().getNombre()));
+        this.columnFechaAtencion.setCellValueFactory(e -> new ReadOnlyStringWrapper(e.getValue().getFechaAtencion().toString()));
+        this.columnEstadoAtencion.setCellValueFactory(e -> new ReadOnlyStringWrapper(e.getValue().getEstadoAtencion().toString()));
+
+        //Datos en la tableViewFacturas
+        this.columnClienteFactura.setCellValueFactory(e -> new ReadOnlyStringWrapper(e.getValue().getCliente().getCedula()));
+        this.columnMascotaFactura.setCellValueFactory(e -> new ReadOnlyStringWrapper(e.getValue().getAtencionVeterinaria().getMascota().getNombre()));
+        this.columnVeterinarioFactura.setCellValueFactory(e -> new ReadOnlyStringWrapper(e.getValue().getAtencionVeterinaria().getVeterinario().getNombre()));
+        this.columnObservacionesFactura.setCellValueFactory(e -> new ReadOnlyStringWrapper(e.getValue().getObservaciones()));
+        this.columnCostoFactura.setCellValueFactory(e -> {
+            double costoFactura = e.getValue().getCosto();
+            String costo = String.valueOf(costoFactura);
+            return new ReadOnlyStringWrapper(costo);
+        });
+        this.columnFechaFactura.setCellValueFactory(e -> new ReadOnlyStringWrapper(e.getValue().getAtencionVeterinaria().getFechaAtencion().toString()));
+
+        //Datos en la tableViewFiltrar
+        //Cliente, nombre mascota, veterinario, fecha, estado Atencion
+        this.columnClienteFiltrar.setCellValueFactory(e -> new ReadOnlyStringWrapper(e.getValue().getCliente().getCedula()));
+        this.columnMascotaFiltrar.setCellValueFactory(e -> new ReadOnlyStringWrapper(e.getValue().getMascota().getNombre()));
+        this.columnVeterinarioFiltrar.setCellValueFactory(e -> new ReadOnlyStringWrapper(e.getValue().getVeterinario().getNombre()));
+        this.columnFechaFiltrar.setCellValueFactory(e -> new ReadOnlyStringWrapper(e.getValue().getFechaAtencion().toString()));
+        this.columnEstadoAtencionFiltrar.setCellValueFactory(e -> new ReadOnlyStringWrapper(e.getValue().getEstadoAtencion().toString()));
     }
 
     public void setAplicacion(Application application) {
