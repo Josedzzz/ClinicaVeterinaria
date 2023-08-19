@@ -11,6 +11,7 @@ public class Clinica {
     private ArrayList<AtencionVeterinaria> listaAtencionVeterinaria;
     private ArrayList<Factura> listaFacturas;
     private ArrayList<Cliente> listaClientes;
+    private ArrayList<Mascota> listaMascotas;
 
     public Clinica(String nombre) {
         this.nombre = nombre;
@@ -18,6 +19,7 @@ public class Clinica {
         this.listaAtencionVeterinaria = new ArrayList<AtencionVeterinaria>();
         this.listaFacturas = new ArrayList<Factura>();
         this.listaClientes = new ArrayList<Cliente>();
+        this.listaMascotas = new ArrayList<Mascota>();
     }
 
     public Clinica() {
@@ -62,6 +64,14 @@ public class Clinica {
 
     public void setListaClientes(ArrayList<Cliente> listaClientes) {
         this.listaClientes = listaClientes;
+    }
+
+    public ArrayList<Mascota> getListaMascotas() {
+        return listaMascotas;
+    }
+
+    public void setListaMascotas(ArrayList<Mascota> listaMascotas) {
+        this.listaMascotas = listaMascotas;
     }
 
     //FUNCIONES LOGIN ------------------------------------------------------------------------------

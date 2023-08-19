@@ -2,9 +2,12 @@ package com.joki.veterinaria.controller;
 
 import com.joki.veterinaria.application.Application;
 import com.joki.veterinaria.model.*;
+import javafx.beans.Observable;
 import javafx.beans.property.ReadOnlyIntegerWrapper;
 import javafx.beans.property.ReadOnlyListProperty;
 import javafx.beans.property.ReadOnlyStringWrapper;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.Initializable;
 import javafx.stage.Stage;
 import java.net.URL;
@@ -237,8 +240,12 @@ public class MenuController implements Initializable {
     //Declaro variables auxiliares
     private Stage stage;
     private Application application;
-    private Veterinario veterinarioLogin;
     private LoginController loginController;
+    private Veterinario veterinarioLogin;
+    ObservableList<Cliente> listadoClientes = FXCollections.observableArrayList();
+    private Cliente clienteSeleccion;
+    ObservableList<Mascota> listadoMascotas = FXCollections.observableArrayList();
+    private Mascota mascotaSeleccion;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -248,6 +255,12 @@ public class MenuController implements Initializable {
         this.columnCedulaCliente.setCellValueFactory(e -> new ReadOnlyStringWrapper(e.getValue().getCedula()));
         this.columnTelefonoCliente.setCellValueFactory(e -> new ReadOnlyStringWrapper(e.getValue().getTelefono()));
         this.columnDireccionCliente.setCellValueFactory(e -> new ReadOnlyStringWrapper(e.getValue().getDireccion()));
+        //Seleccion de clientes en la tabla
+        tableViewCliente.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
+            if (newSelection != null) {
+                clienteSeleccion = newSelection;
+            }
+        });
 
         //Datos en la tableViewMascota
         this.columnNombreMascota.setCellValueFactory(e -> new ReadOnlyStringWrapper(e.getValue().getNombre()));
@@ -260,6 +273,12 @@ public class MenuController implements Initializable {
         this.columnSexoMascota.setCellValueFactory(e -> new ReadOnlyStringWrapper(e.getValue().getSexo().toString()));
         this.columnCedulaMascota.setCellValueFactory(e -> new ReadOnlyStringWrapper(e.getValue().getDuenio().getCedula()));
         this.columnTipoMascota.setCellValueFactory(e -> new ReadOnlyStringWrapper(e.getValue().getTipo().toString()));
+        //Seleccion de mascotas en la tabla
+        tableViewMascota.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
+            if (newSelection != null) {
+                mascotaSeleccion = newSelection;
+            }
+        });
 
         //Datos en la tableViewAtenciones
         this.columnClienteAtencion.setCellValueFactory(e -> new ReadOnlyStringWrapper(e.getValue().getCliente().getCedula()));
@@ -291,6 +310,22 @@ public class MenuController implements Initializable {
 
     public void setAplicacion(Application application) {
         this.application = application;
+        //Lista de clientes a mostrar
+        tableViewCliente.getItems().clear();
+        tableViewCliente.setItems(getListaClientes());
+        //Lista de mascotas a mostrar
+        tableViewMascota.getItems().clear();
+        tableViewMascota.setItems(getListaMascotas());
+    }
+
+    private ObservableList<Cliente> getListaClientes() {
+        listadoClientes.addAll(mfm.getListaClientes());
+        return listadoClientes;
+    }
+
+    private ObservableList<Mascota> getListaMascotas() {
+        listadoMascotas.addAll(mfm.getListaMascotas());
+        return listadoMascotas;
     }
 
     public void init(Stage stage, LoginController loginController, Veterinario veterinarioLogin) {

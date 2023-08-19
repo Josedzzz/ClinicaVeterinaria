@@ -1,7 +1,11 @@
 package com.joki.veterinaria.controller;
 
+import com.joki.veterinaria.model.Cliente;
 import com.joki.veterinaria.model.Clinica;
+import com.joki.veterinaria.model.Mascota;
 import com.joki.veterinaria.model.Veterinario;
+
+import java.util.List;
 
 public class ModelFactoryController {
     Clinica clinica = null;
@@ -53,6 +57,24 @@ public class ModelFactoryController {
      */
     public Veterinario darVeterinario(String nombre, String codigo) {
         return clinica.darVeterinario(nombre, codigo);
+    }
+
+    //FUNCIONES PARA EL MENU --------------------------------------------------------------------------
+
+    //FUNCIONES PESTANIA CLIENTES -------------------------------------------------------------------
+
+    /**
+     * Obtengo la lista de clientes
+     * @return
+     */
+    public List<Cliente> getListaClientes() {
+        return clinica.getListaClientes();
+    }
+
+    //FUNCIONES PESTANIA MASCOTAS -------------------------------------------------------------------
+
+    public List<Mascota> getListaMascotas() {
+        return clinica.getListaMascotas();
     }
 
 }
