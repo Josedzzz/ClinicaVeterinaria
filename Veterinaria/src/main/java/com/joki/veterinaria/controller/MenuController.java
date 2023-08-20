@@ -11,6 +11,8 @@ import javafx.collections.ObservableList;
 import javafx.fxml.Initializable;
 import javafx.stage.Stage;
 import java.net.URL;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ResourceBundle;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -246,6 +248,13 @@ public class MenuController implements Initializable {
     private Cliente clienteSeleccion;
     ObservableList<Mascota> listadoMascotas = FXCollections.observableArrayList();
     private Mascota mascotaSeleccion;
+    private String fechaAtencion;
+    ObservableList<AtencionVeterinaria> listadoAtenciones = FXCollections.observableArrayList();
+    private AtencionVeterinaria atencionVeterinariaSeleccion;
+    ObservableList<Factura> listadoFacturas = FXCollections.observableArrayList();
+    private String fechaInicialFiltrar;
+    private String fechaFinalFiltrar;
+
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -280,15 +289,28 @@ public class MenuController implements Initializable {
             }
         });
 
+        //Manejo de la fecha para atenciones veterinarias
+        datePickerFechaAtencion.setOnAction(event -> {
+            LocalDate date = datePickerFechaAtencion.getValue();
+            DateTimeFormatter formato = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+            fechaAtencion = date.format(formato);
+        });
+
         //Datos en la tableViewAtenciones
         this.columnClienteAtencion.setCellValueFactory(e -> new ReadOnlyStringWrapper(e.getValue().getCliente().getCedula()));
         this.columnMascotaAtencion.setCellValueFactory(e -> new ReadOnlyStringWrapper(e.getValue().getMascota().getNombre()));
         this.columnVeterinarioAtencion.setCellValueFactory(e -> new ReadOnlyStringWrapper(e.getValue().getVeterinario().getNombre()));
         this.columnFechaAtencion.setCellValueFactory(e -> new ReadOnlyStringWrapper(e.getValue().getFechaAtencion().toString()));
         this.columnEstadoAtencion.setCellValueFactory(e -> new ReadOnlyStringWrapper(e.getValue().getEstadoAtencion().toString()));
+        //Selecciono atenciones de la tabla
+        tableViewAtenciones.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
+            if (newSelection != null) {
+                atencionVeterinariaSeleccion = newSelection;
+            }
+        });
 
         //Datos en la tableViewFacturas
-        this.columnClienteFactura.setCellValueFactory(e -> new ReadOnlyStringWrapper(e.getValue().getCliente().getCedula()));
+        this.columnClienteFactura.setCellValueFactory(e -> new ReadOnlyStringWrapper(e.getValue().getAtencionVeterinaria().getCliente().getCedula()));
         this.columnMascotaFactura.setCellValueFactory(e -> new ReadOnlyStringWrapper(e.getValue().getAtencionVeterinaria().getMascota().getNombre()));
         this.columnVeterinarioFactura.setCellValueFactory(e -> new ReadOnlyStringWrapper(e.getValue().getAtencionVeterinaria().getVeterinario().getNombre()));
         this.columnObservacionesFactura.setCellValueFactory(e -> new ReadOnlyStringWrapper(e.getValue().getObservaciones()));
@@ -300,12 +322,24 @@ public class MenuController implements Initializable {
         this.columnFechaFactura.setCellValueFactory(e -> new ReadOnlyStringWrapper(e.getValue().getAtencionVeterinaria().getFechaAtencion().toString()));
 
         //Datos en la tableViewFiltrar
-        //Cliente, nombre mascota, veterinario, fecha, estado Atencion
         this.columnClienteFiltrar.setCellValueFactory(e -> new ReadOnlyStringWrapper(e.getValue().getCliente().getCedula()));
         this.columnMascotaFiltrar.setCellValueFactory(e -> new ReadOnlyStringWrapper(e.getValue().getMascota().getNombre()));
         this.columnVeterinarioFiltrar.setCellValueFactory(e -> new ReadOnlyStringWrapper(e.getValue().getVeterinario().getNombre()));
         this.columnFechaFiltrar.setCellValueFactory(e -> new ReadOnlyStringWrapper(e.getValue().getFechaAtencion().toString()));
         this.columnEstadoAtencionFiltrar.setCellValueFactory(e -> new ReadOnlyStringWrapper(e.getValue().getEstadoAtencion().toString()));
+
+        //Manejo de la fecha inicial y final para manejo de atencionesVeterinarias filtradas
+        datePickerIncialFiltrar.setOnAction(event -> {
+            LocalDate date = datePickerIncialFiltrar.getValue();
+            DateTimeFormatter formato = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+            fechaInicialFiltrar = date.format(formato);
+        });
+
+        datePickerFinalFiltrar.setOnAction(event -> {
+            LocalDate date = datePickerFinalFiltrar.getValue();
+            DateTimeFormatter formato = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+            fechaFinalFiltrar = date.format(formato);
+        });
     }
 
     public void setAplicacion(Application application) {
@@ -316,16 +350,48 @@ public class MenuController implements Initializable {
         //Lista de mascotas a mostrar
         tableViewMascota.getItems().clear();
         tableViewMascota.setItems(getListaMascotas());
+        //Lista de atenciones a mostrar
+        tableViewAtenciones.getItems().clear();
+        tableViewAtenciones.setItems(getListaAtenciones());
+        //Lista de facturas a mostrar
+        tableViewFacturas.getItems().clear();
+        tableViewFacturas.setItems(getListaFacturas());
     }
 
+    /**
+     * Obtengo la lista de clientes de la clinica
+     * @return
+     */
     private ObservableList<Cliente> getListaClientes() {
         listadoClientes.addAll(mfm.getListaClientes());
         return listadoClientes;
     }
 
+    /**
+     * Obtengo la lista de mascotas de la clinica
+     * @return
+     */
     private ObservableList<Mascota> getListaMascotas() {
         listadoMascotas.addAll(mfm.getListaMascotas());
         return listadoMascotas;
+    }
+
+    /**
+     * Obtengo la lista de atenciones de la clinica
+     * @return
+     */
+    private ObservableList<AtencionVeterinaria> getListaAtenciones() {
+        listadoAtenciones.addAll(mfm.getListaAtenciones());
+        return listadoAtenciones;
+    }
+
+    /**
+     * Obtenfo la lista de facturas de la clinica
+     * @return
+     */
+    private ObservableList<Factura> getListaFacturas() {
+        listadoFacturas.addAll(mfm.getListaFacturas());
+        return listadoFacturas;
     }
 
     public void init(Stage stage, LoginController loginController, Veterinario veterinarioLogin) {

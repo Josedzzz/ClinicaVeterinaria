@@ -1,9 +1,6 @@
 package com.joki.veterinaria.controller;
 
-import com.joki.veterinaria.model.Cliente;
-import com.joki.veterinaria.model.Clinica;
-import com.joki.veterinaria.model.Mascota;
-import com.joki.veterinaria.model.Veterinario;
+import com.joki.veterinaria.model.*;
 
 import java.util.List;
 
@@ -73,8 +70,38 @@ public class ModelFactoryController {
 
     //FUNCIONES PESTANIA MASCOTAS -------------------------------------------------------------------
 
+    /**
+     * Obtengo la lista de mascotas
+     * @return
+     */
     public List<Mascota> getListaMascotas() {
         return clinica.getListaMascotas();
     }
+
+    //FUNCIONES PESTANIA ATENCION VETERINARIA --------------------------------------------------------
+
+    //FUNCIONES PESTANIA LISTA ATENCIONES ------------------------------------------------------------
+
+    /**
+     * Obtengo la lista de atenciones veterinarias
+     * @return
+     */
+    public List<AtencionVeterinaria> getListaAtenciones() {
+        return clinica.getListaAtencionVeterinaria();
+    }
+
+    //FUNCIONES PESTANIA LISTA DE FACTURAS ------------------------------------------------------------
+
+    /**
+     * Obtengo la lista de facturas
+     * @return
+     */
+    public List<Factura> getListaFacturas() {
+        return clinica.getListaFacturas();
+    }
+
+    //FUNCIONES PESTANIA HISTORIAL CLINICO --------------------------------------------------------------
+
+    //FUNCIONES PESTANIA FILTRAR CITAS ------------------------------------------------------------------
 
 }

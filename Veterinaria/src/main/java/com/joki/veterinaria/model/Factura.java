@@ -5,13 +5,11 @@ import java.time.LocalDate;
 public class Factura {
     private double costo;
     private String observaciones;
-    private Cliente cliente;
     private AtencionVeterinaria atencionVeterinaria;
 
-    public Factura(double costo, String observaciones, Cliente cliente, AtencionVeterinaria atencionVeterinaria) {
+    public Factura(double costo, String observaciones, AtencionVeterinaria atencionVeterinaria) {
         this.costo = costo;
         this.observaciones = observaciones;
-        this.cliente = cliente;
         this.atencionVeterinaria = atencionVeterinaria;
     }
 
@@ -29,14 +27,6 @@ public class Factura {
 
     public void setObservaciones(String observaciones) {
         this.observaciones = observaciones;
-    }
-
-    public Cliente getCliente() {
-        return cliente;
-    }
-
-    public void setCliente(Cliente cliente) {
-        this.cliente = cliente;
     }
 
     public AtencionVeterinaria getAtencionVeterinaria() {
