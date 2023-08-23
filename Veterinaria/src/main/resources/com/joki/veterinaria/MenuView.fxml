@@ -237,8 +237,8 @@
                           <columns>
                             <TableColumn fx:id="columnClienteAtencion" prefWidth="97.0" text="Cliente" />
                             <TableColumn fx:id="columnMascotaAtencion" prefWidth="139.0" text="Nombre mascota" />
-                              <TableColumn fx:id="columnVeterinarioAtencion" prefWidth="178.0" text="Veterinario encargado" />
-                              <TableColumn fx:id="columnFechaAtencion" prefWidth="74.0" text="Fecha" />
+                              <TableColumn fx:id="columnVeterinarioAtencion" prefWidth="87.0" text="Veterinario" />
+                              <TableColumn fx:id="columnFechaAtencion" prefWidth="165.0" text="Fecha" />
                               <TableColumn fx:id="columnEstadoAtencion" prefWidth="130.0" text="Estado atención" />
                           </columns>
                         </TableView>

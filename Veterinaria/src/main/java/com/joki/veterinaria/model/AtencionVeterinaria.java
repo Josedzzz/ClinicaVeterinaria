@@ -1,5 +1,7 @@
 package com.joki.veterinaria.model;
 
+import java.util.Objects;
+
 public class AtencionVeterinaria {
     private Cliente cliente;
     private Mascota mascota;
@@ -57,5 +59,18 @@ public class AtencionVeterinaria {
 
     public void setFechaAtencion(String fechaAtencion) {
         this.fechaAtencion = fechaAtencion;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        AtencionVeterinaria that = (AtencionVeterinaria) o;
+        return Objects.equals(cliente, that.cliente) && Objects.equals(mascota, that.mascota) && Objects.equals(veterinario, that.veterinario) && estadoAtencion == that.estadoAtencion && Objects.equals(fechaAtencion, that.fechaAtencion);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(cliente, mascota, veterinario, estadoAtencion, fechaAtencion);
     }
 }

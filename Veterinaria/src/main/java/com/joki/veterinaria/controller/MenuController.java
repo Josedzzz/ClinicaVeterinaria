@@ -2,13 +2,11 @@ package com.joki.veterinaria.controller;
 
 import com.joki.veterinaria.application.Application;
 import com.joki.veterinaria.model.*;
-import javafx.beans.Observable;
-import javafx.beans.property.ReadOnlyIntegerWrapper;
-import javafx.beans.property.ReadOnlyListProperty;
 import javafx.beans.property.ReadOnlyStringWrapper;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.Initializable;
+import javafx.scene.control.*;
 import javafx.stage.Stage;
 import java.net.URL;
 import java.time.LocalDate;
@@ -16,12 +14,6 @@ import java.time.format.DateTimeFormatter;
 import java.util.ResourceBundle;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
-import javafx.scene.control.TextField;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.DatePicker;
 
 public class MenuController implements Initializable {
 
@@ -305,7 +297,7 @@ public class MenuController implements Initializable {
         this.columnClienteAtencion.setCellValueFactory(e -> new ReadOnlyStringWrapper(e.getValue().getCliente().getCedula()));
         this.columnMascotaAtencion.setCellValueFactory(e -> new ReadOnlyStringWrapper(e.getValue().getMascota().getNombre()));
         this.columnVeterinarioAtencion.setCellValueFactory(e -> new ReadOnlyStringWrapper(e.getValue().getVeterinario().getNombre()));
-        this.columnFechaAtencion.setCellValueFactory(e -> new ReadOnlyStringWrapper(e.getValue().getFechaAtencion().toString()));
+        this.columnFechaAtencion.setCellValueFactory(e -> new ReadOnlyStringWrapper(e.getValue().getFechaAtencion()));
         this.columnEstadoAtencion.setCellValueFactory(e -> new ReadOnlyStringWrapper(e.getValue().getEstadoAtencion().toString()));
         //Selecciono atenciones de la tabla
         tableViewAtenciones.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
@@ -405,6 +397,21 @@ public class MenuController implements Initializable {
         this.veterinarioLogin = veterinarioLogin;
     }
 
+    /**
+     * Muestra un mensaje por pantalla
+     * @param title
+     * @param header
+     * @param content
+     * @param alertType
+     */
+    public void mostrarMensaje(String title, String header, String content, Alert.AlertType alertType) {
+        Alert alert = new Alert(alertType);
+        alert.setTitle(title);
+        alert.setHeaderText(header);
+        alert.setContentText(content);
+        alert.showAndWait();
+    }
+
     //FUNCIONES PESTANIA CLIENTES ----------------------------------------------------------------
     @FXML
     void actualizarCliente(ActionEvent event) {
@@ -457,7 +464,66 @@ public class MenuController implements Initializable {
 
     @FXML
     void generarCitaAtencion(ActionEvent event) {
-        
+        String cedulaCliente = txtCedulaClienteAtencion.getText();
+        String nombreMascota = txtNombreMascotaAtencion.getText();
+        String codigoVeterinario = txtCodigoVeterinarioAtencion.getText();
+        if (datosValidosAtencion(cedulaCliente, nombreMascota, codigoVeterinario, fechaAtencion)) {
+            generarCitaAtencion(cedulaCliente, nombreMascota, codigoVeterinario, fechaAtencion);
+        }
+    }
+
+    /**
+     * Verifica que los datos esten llenados y que la fecha esté en el formato indicado
+     * @param cedulaCliente
+     * @param nombreMascota
+     * @param codigoVeterinario
+     * @param fecha
+     * @return
+     */
+    private boolean datosValidosAtencion(String cedulaCliente, String nombreMascota, String codigoVeterinario, String fecha) {
+        String notificacion = "";
+        boolean fechaValida = mfm.validarFechaAtencion(fecha);
+        if (cedulaCliente == null || cedulaCliente.equals("")) {
+            notificacion += "Ingrese la cedula del cliente\n";
+        }
+        if (nombreMascota == null || nombreMascota.equals("")) {
+            notificacion += "Ingrese el nombre de la mascota \n";
+        }
+        if (codigoVeterinario == null || codigoVeterinario.equals("")) {
+            notificacion += "Ingrese el código del veterinario \n";
+        }
+        if (!fechaValida) {
+            notificacion += "La fecha de la atención es invalida\n";
+        }
+        //Si no hay notificacion es porque los datos estan validos
+        if (notificacion.equals("")) {
+            return true;
+        }
+        mostrarMensaje("Notificación atención", "Información para la atención invalida", notificacion, Alert.AlertType.WARNING);
+        return false;
+    }
+
+    /**
+     * Genera una cita si todos los datos son validos y existen
+     * @param cedulaCliente
+     * @param nombreMascota
+     * @param codigoVeterinario
+     * @param fecha
+     */
+    private void generarCitaAtencion(String cedulaCliente, String nombreMascota, String codigoVeterinario, String fecha) {
+        String fueGenerada = ""; //Variable auxiliar para revisar campos
+        fueGenerada = mfm.generarAtencion(cedulaCliente, nombreMascota, codigoVeterinario, fecha);
+        if (fueGenerada.equals("")) {
+            //Add atencion a la tableView
+            tableViewAtenciones.getItems().clear();
+            tableViewAtenciones.setItems(getListaAtenciones());
+            txtCedulaClienteAtencion.setText("");
+            txtNombreMascotaAtencion.setText("");
+            txtCodigoVeterinarioAtencion.setText("");
+            mostrarMensaje("Notificación atención", "Atención generada correctamente", "La cita ya se encuentra en el sistema", Alert.AlertType.CONFIRMATION);
+        } else {
+            mostrarMensaje("Notificación atención", "Información no valida", fueGenerada, Alert.AlertType.WARNING);
+        }
     }
 
     //FUNCIONES PARA PESTANIA LISTA DE ATENCIONES -----------------------------------------------------

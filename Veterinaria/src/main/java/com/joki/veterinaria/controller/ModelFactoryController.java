@@ -95,6 +95,28 @@ public class ModelFactoryController {
 
     //FUNCIONES PESTANIA ATENCION VETERINARIA --------------------------------------------------------
 
+    /**
+     * Valida que la fecha esté en el formato correcto
+     * @param fecha
+     * @return
+     */
+    public boolean validarFechaAtencion(String fecha) {
+        return clinica.validarFechaAtencion(fecha);
+    }
+
+    /**
+     * Genera la atencion. Si el String es "" es porque fue generada correctamente
+     * @param cedulaCliente
+     * @param nombreMascota
+     * @param codigoVeterinario
+     * @param fecha
+     * @return
+     */
+    public String generarAtencion(String cedulaCliente, String nombreMascota, String codigoVeterinario, String fecha) {
+        String fueGenerada = clinica.generarAtencion(cedulaCliente, nombreMascota, codigoVeterinario, fecha);
+        return fueGenerada;
+    }
+
     //FUNCIONES PESTANIA LISTA ATENCIONES ------------------------------------------------------------
 
     /**

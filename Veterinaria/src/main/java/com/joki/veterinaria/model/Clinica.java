@@ -3,6 +3,8 @@ package com.joki.veterinaria.model;
 import com.joki.veterinaria.exceptions.ClienteNoRegistradoException;
 import com.joki.veterinaria.exceptions.ClienteYaExistenteException;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 
 public class Clinica {
@@ -92,6 +94,25 @@ public class Clinica {
         return veterinarioEncontrado;
     }
 
+    /**
+     * Retorna el veterinario solo con el codigo
+     * @param codigo
+     * @return
+     */
+    public Veterinario obtenerVeterinario(String codigo) {
+        Veterinario veterinarioEncontrado = null;
+        for (Veterinario veterinario : listaVeterinarios) {
+            if (veterinario.getCodigo().equals(codigo)) {
+                veterinarioEncontrado = veterinario;
+            }
+        }
+        return veterinarioEncontrado;
+    }
+
+    //FUNCIONES MENU -------------------------------------------------------------------------------------
+
+    //FUNCIONES PESTANIA DE CLIENTES ---------------------------------------------------------------------
+
     public Cliente obtenerCliente(String cedula){
         Cliente clienteEncontrado = null;
         for (Cliente cliente : listaClientes) {
@@ -142,4 +163,81 @@ public class Clinica {
             throw new ClienteNoRegistradoException("El cliente con cedula" + cedula + "no esta registrado");
         }
     }
+
+    /**
+     * Retorna la mascota de un cliente
+     * @param clienteEncontrado
+     * @param nombreMascota
+     * @return
+     */
+    private Mascota obtenerMascota(Cliente cliente, String nombreMascota) {
+        Mascota mascotaEncontrada = null;
+        for (Mascota mascota : cliente.getListaMascotas()) {
+            if (mascota.getNombre().equals(nombreMascota)) {
+                mascotaEncontrada = mascota;
+            }
+        }
+        return mascotaEncontrada;
+    }
+
+    //FUNCIONES PESTANIA DE MASCOTAS -----------------------------------------------------------------
+
+    //FUNCIONES PESTANIA ATENCION VETERINARIA --------------------------------------------------------
+
+    /**
+     * Valida que una fehca esté en el formato correcto
+     * @param fecha
+     * @return
+     */
+    public boolean validarFechaAtencion(String fecha) {
+        SimpleDateFormat formatoFecha = new SimpleDateFormat("dd/MM/yyyy");
+        formatoFecha.setLenient(false);
+        try {
+            formatoFecha.parse(fecha);
+            return true;
+        } catch (ParseException e) {
+            return false;
+        }
+    }
+
+    /**
+     * Si los objetos son encontrados genero la atencion
+     * @param cedulaCliente
+     * @param nombreMascota
+     * @param codigoVeterinario
+     * @param fecha
+     * @return
+     */
+    public String generarAtencion(String cedulaCliente, String nombreMascota, String codigoVeterinario, String fecha) {
+        String fueCreado = "";
+        Veterinario veterinarioEncontrado = obtenerVeterinario(codigoVeterinario);
+        Cliente clienteEncontrado = obtenerCliente(cedulaCliente);
+        Mascota mascotaEncontrada = null;
+        if (veterinarioEncontrado == null) {
+            fueCreado += "El código del veterinario no existe\n";
+        }
+        if (clienteEncontrado == null) {
+            fueCreado += "La cédula del cliente no existe";
+        } else {
+            mascotaEncontrada = obtenerMascota(clienteEncontrado, nombreMascota);
+        }
+        if (mascotaEncontrada == null) {
+            fueCreado += "El nombre de la mascota no corresponde a una mascota del dueño\n";
+        }
+        //Dependiendo de fueCreado se sabe si todos los valores son correctos o no
+        if (fueCreado.equals("")) {
+            AtencionVeterinaria atencionVeterinaria = new AtencionVeterinaria(clienteEncontrado, mascotaEncontrada, veterinarioEncontrado, EstadoAtencion.CREADA, fecha);
+            listaAtencionVeterinaria.add(atencionVeterinaria);
+        }
+        return fueCreado;
+    }
+
+
+    //FUNCIONES PESTANIA LISTA DE ATENCIONES ---------------------------------------------------------
+
+    //FUCNIONES PESTANIA LISTA DE FACTURAS -----------------------------------------------------------
+
+    //FUNCIONES PESTANIA HISTORIAL CLINICO -----------------------------------------------------------
+
+    //FUNCIONES PESTANIA FILTRAR CITAS ---------------------------------------------------------------
 }
