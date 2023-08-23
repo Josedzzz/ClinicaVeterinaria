@@ -42,6 +42,21 @@ public class ModelFactoryController {
         clinica.getListaVeterinarios()[1] = veterinario2;
         clinica.getListaVeterinarios()[2] = veterinario3;
         clinica.getListaVeterinarios()[3] = veterinario4;
+
+        Cliente cliente1 = new Cliente("Julian", "julian@gmail.com", "123456789", "10097001", "Cra 18 #11-11");
+        Cliente cliente2 = new Cliente("Lorena", "lorena@gmail.com", "312888833", "22255511", "Cra 12 #22-22");
+        Cliente cliente3 = new Cliente("Alex", "alex@gmail.com", "311999231", "10971222", "Cra 22 #33-33");
+        clinica.getListaClientes().add(cliente1);
+        clinica.getListaClientes().add(cliente2);
+        clinica.getListaClientes().add(cliente3);
+
+        Mascota mascota1 = new Mascota("Hermes", 1, SexoMascota.MACHO, "Criollo", TipoMascota.PERRO, cliente2);
+        clinica.getListaMascotas().add(mascota1);
+        cliente2.getListaMascotas().add(mascota1);
+
+        Mascota mascota2 = new Mascota("Mercy", 3, SexoMascota.HEMBRA, "Criolla", TipoMascota.GATO, cliente1);
+        clinica.getListaMascotas().add(mascota2);
+        cliente1.getListaMascotas().add(mascota2);
     }
 
     //FUNCIONES PARA EL LOGIN ----------------------------------------------------------------------

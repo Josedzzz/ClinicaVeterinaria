@@ -102,13 +102,13 @@ public class Clinica {
         return clienteEncontrado;
     }
 
-    public boolean crearCliente(String nombre, String correo, String telefono, String cedula, String Direccion, ArrayList listaMascotas) throws ClienteYaExistenteException {
+    public boolean crearCliente(String nombre, String correo, String telefono, String cedula, String Direccion) throws ClienteYaExistenteException {
         boolean fueCreado = false;
         Cliente clienteAsociado = obtenerCliente(cedula);
         if (clienteAsociado != null){
             throw new ClienteYaExistenteException("El cliente ya existe");
         } else {
-            Cliente clienteNuevo = new Cliente(nombre,correo,telefono, cedula, Direccion,listaMascotas);
+            Cliente clienteNuevo = new Cliente(nombre,correo,telefono, cedula, Direccion);
             listaClientes.add(clienteNuevo);
             fueCreado = true;
         }

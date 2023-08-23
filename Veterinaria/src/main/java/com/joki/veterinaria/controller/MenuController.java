@@ -289,6 +289,11 @@ public class MenuController implements Initializable {
             }
         });
 
+        //Datos del comboBox de sexo mascotas
+        this.comboBoxSexoMascota.getItems().addAll(SexoMascota.values());
+        //Datos del comboBox de tipo mascotas
+        this.comboBoxTipoMascota.getItems().addAll(TipoMascota.values());
+
         //Manejo de la fecha para atenciones veterinarias
         datePickerFechaAtencion.setOnAction(event -> {
             LocalDate date = datePickerFechaAtencion.getValue();
@@ -452,7 +457,7 @@ public class MenuController implements Initializable {
 
     @FXML
     void generarCitaAtencion(ActionEvent event) {
-
+        
     }
 
     //FUNCIONES PARA PESTANIA LISTA DE ATENCIONES -----------------------------------------------------
