@@ -235,6 +235,35 @@ public class Clinica {
 
     //FUNCIONES PESTANIA LISTA DE ATENCIONES ---------------------------------------------------------
 
+    /**
+     * Cancela una atencion veterinaria cambiando su estado a CANCELADA
+     * @param atencionVeterinaria
+     * @return
+     */
+    public boolean cancelarAtencionVeterinaria(AtencionVeterinaria atencionVeterinaria) {
+        boolean existeAtencion = existeAtencion(atencionVeterinaria);
+        if (existeAtencion) {
+            atencionVeterinaria.setEstadoAtencion(EstadoAtencion.CANCELADA);
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    /**
+     * Reviso que una atencion si exista
+     * @param atencionVeterinaria
+     * @return
+     */
+    private boolean existeAtencion(AtencionVeterinaria atencionVeterinaria) {
+        for (AtencionVeterinaria atencionVeterinariaAux : listaAtencionVeterinaria) {
+            if (atencionVeterinariaAux.equals(atencionVeterinaria)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     //FUCNIONES PESTANIA LISTA DE FACTURAS -----------------------------------------------------------
 
     //FUNCIONES PESTANIA HISTORIAL CLINICO -----------------------------------------------------------

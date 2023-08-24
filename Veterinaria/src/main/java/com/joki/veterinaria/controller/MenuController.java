@@ -5,9 +5,14 @@ import com.joki.veterinaria.model.*;
 import javafx.beans.property.ReadOnlyStringWrapper;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
+
+import java.io.IOException;
 import java.net.URL;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -528,14 +533,52 @@ public class MenuController implements Initializable {
 
     //FUNCIONES PARA PESTANIA LISTA DE ATENCIONES -----------------------------------------------------
 
+    /**
+     * Genera la ventana para atender una nueva cita
+     * @param event
+     * @throws IOException
+     */
     @FXML
-    void atenderCitaAtencion(ActionEvent event) {
-
+    void atenderCitaAtencion(ActionEvent event) throws IOException {
+        if (atencionVeterinariaSeleccion != null) {
+            if (atencionVeterinariaSeleccion.getEstadoAtencion().equals(EstadoAtencion.CREADA)) {
+                FXMLLoader loader = new FXMLLoader();
+                loader.setLocation(Application.class.getResource("/com/joki/veterinaria/AtencionCitaView.fxml"));
+                BorderPane borderPane = (BorderPane) loader.load();
+                AtencionCitaController controller = loader.getController();
+                controller.setAplicacion(application);
+                Scene scene = new Scene(borderPane);
+                Stage stage = new Stage();
+                stage.setTitle("Atender cita veterinaria");
+                stage.setScene(scene);
+                controller.init(stage, this, atencionVeterinariaSeleccion);
+                stage.show();
+                this.stage.close();
+            } else {
+                mostrarMensaje("Notificación manejo de citas", "No se puede atender la cita", "Verifique que la cita no esté cancelada o atendida", Alert.AlertType.WARNING);
+            }
+        } else {
+            mostrarMensaje("Notificación manejo de citas", "Atención no seleccionada", "No se ha seleccionado ninguna atención", Alert.AlertType.WARNING);
+        }
     }
 
+    /**
+     * Cancela una atencion veterinaria cambiando su estado a CANCELADA
+     * @param event
+     */
     @FXML
     void cancelarCitaAtencion(ActionEvent event) {
-
+        if (atencionVeterinariaSeleccion != null) {
+            boolean atencionCancelada = mfm.cancelarAtencionVeterinaria(atencionVeterinariaSeleccion);
+            if (atencionCancelada) {
+                tableViewAtenciones.refresh();
+                mostrarMensaje("Notificación manejo de citas", "Cita cancelada", "La cita ha sido cancelada correctamente", Alert.AlertType.INFORMATION);
+            } else {
+                mostrarMensaje("Notificación manejo de citas", "Cita no cancelada", "La cita no ha podido ser cancelada", Alert.AlertType.WARNING);
+            }
+        } else {
+            mostrarMensaje("Notificación manejo de citas", "Atención no seleccionada", "No se ha seleccionado ninguna atención", Alert.AlertType.WARNING);
+        }
     }
 
     //FUNCIONES PARA PESTANIA LISTA DE FACTURAS ----------------------------------------------------------

@@ -127,6 +127,15 @@ public class ModelFactoryController {
         return clinica.getListaAtencionVeterinaria();
     }
 
+    /**
+     * Cancela una atencion
+     * @param atencionVeterinaria
+     * @return
+     */
+    public boolean cancelarAtencionVeterinaria(AtencionVeterinaria atencionVeterinaria) {
+        return clinica.cancelarAtencionVeterinaria(atencionVeterinaria);
+    }
+
     //FUNCIONES PESTANIA LISTA DE FACTURAS ------------------------------------------------------------
 
     /**
