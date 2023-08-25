@@ -193,6 +193,9 @@ public class MenuController implements Initializable {
     @FXML
     private TableView<Factura> tableViewFacturas;
 
+    @FXML
+    private Button btnVerObservacionesFacturas;
+
     //PESTANIA HISTORIAL CLINICO --------------------------------------------------------------------
 
     @FXML
@@ -249,6 +252,7 @@ public class MenuController implements Initializable {
     ObservableList<AtencionVeterinaria> listadoAtenciones = FXCollections.observableArrayList();
     private AtencionVeterinaria atencionVeterinariaSeleccion;
     ObservableList<Factura> listadoFacturas = FXCollections.observableArrayList();
+    private Factura facturaSeleccion;
     private String fechaInicialFiltrar;
     private String fechaFinalFiltrar;
 
@@ -322,6 +326,12 @@ public class MenuController implements Initializable {
             return new ReadOnlyStringWrapper(costo);
         });
         this.columnFechaFactura.setCellValueFactory(e -> new ReadOnlyStringWrapper(e.getValue().getAtencionVeterinaria().getFechaAtencion().toString()));
+        //Selecciono facturas en la tabla
+        tableViewFacturas.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
+            if (newSelection != null) {
+                facturaSeleccion = newSelection;
+            }
+        });
 
         //Datos en la tableViewFiltrar
         this.columnClienteFiltrar.setCellValueFactory(e -> new ReadOnlyStringWrapper(e.getValue().getCliente().getCedula()));
@@ -606,9 +616,23 @@ public class MenuController implements Initializable {
         }
     }
 
-    //FUNCIONES PARA PESTANIA LISTA DE FACTURAS ----------------------------------------------------------
+    //FUNCIONES PARA PESTANIA LISTA DE FACTURAS ------------------------------------------------------
 
-    //FUNCIONES PARA PESTANIA HISTORIAL CLINICO ------------------------------------------------------------
+    /**
+     * Selecciona una factura para mostrar el mensaje de las observaciones
+     * @param event
+     */
+    @FXML
+    void verObservacionesFacturas(ActionEvent event) {
+        if (facturaSeleccion != null) {
+            String observacion = mfm.verObservacionesFacturas(facturaSeleccion);
+            mostrarMensaje("Notificación facturas", "Las observaciones puestas por el veterinario son: ", observacion, Alert.AlertType.INFORMATION);
+        } else {
+            mostrarMensaje("Notificación facturas", "Factura no seleccionada", "No se ha seleccionado ninguna factura", Alert.AlertType.WARNING);
+        }
+    }
+
+    //FUNCIONES PARA PESTANIA HISTORIAL CLINICO -------------------------------------------------------
 
     @FXML
     void generarHistorial(ActionEvent event) {

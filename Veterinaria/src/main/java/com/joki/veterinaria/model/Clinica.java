@@ -266,6 +266,16 @@ public class Clinica {
 
     //FUCNIONES PESTANIA LISTA DE FACTURAS -----------------------------------------------------------
 
+    /**
+     * Obtengo las observaciones de una factura
+     * @param facturaSeleccion
+     * @return
+     */
+    public String verObservacionesFacturas(Factura facturaSeleccion) {
+        String observaciones = facturaSeleccion.getObservaciones();
+        return observaciones;
+    }
+
     //FUNCIONES PESTANIA HISTORIAL CLINICO -----------------------------------------------------------
 
     //FUNCIONES PESTANIA FILTRAR CITAS ---------------------------------------------------------------

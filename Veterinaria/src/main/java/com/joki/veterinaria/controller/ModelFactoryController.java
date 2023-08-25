@@ -149,6 +149,16 @@ public class ModelFactoryController {
         return clinica.getListaFacturas();
     }
 
+    /**
+     * Obtengo las observaciones de una factura
+     * @param facturaSeleccion
+     * @return
+     */
+    public String verObservacionesFacturas(Factura facturaSeleccion) {
+        String observacion = clinica.verObservacionesFacturas(facturaSeleccion);
+        return observacion;
+    }
+
     //FUNCIONES PESTANIA HISTORIAL CLINICO --------------------------------------------------------------
 
     //FUNCIONES PESTANIA FILTRAR CITAS ------------------------------------------------------------------
