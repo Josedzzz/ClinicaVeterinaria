@@ -73,4 +73,15 @@ public class AtencionVeterinaria {
     public int hashCode() {
         return Objects.hash(cliente, mascota, veterinario, estadoAtencion, fechaAtencion);
     }
+
+    @Override
+    public String toString() {
+        return "AtencionVeterinaria{" +
+                "cliente=" + cliente +
+                ", mascota=" + mascota +
+                ", veterinario=" + veterinario +
+                ", estadoAtencion=" + estadoAtencion +
+                ", fechaAtencion='" + fechaAtencion + '\'' +
+                '}';
+    }
 }

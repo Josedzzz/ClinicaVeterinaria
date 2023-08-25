@@ -242,7 +242,7 @@ public class Clinica {
      */
     public boolean cancelarAtencionVeterinaria(AtencionVeterinaria atencionVeterinaria) {
         boolean existeAtencion = existeAtencion(atencionVeterinaria);
-        if (existeAtencion) {
+        if (existeAtencion && atencionVeterinaria.getEstadoAtencion().equals(EstadoAtencion.CREADA)) {
             atencionVeterinaria.setEstadoAtencion(EstadoAtencion.CANCELADA);
             return true;
         } else {
@@ -269,4 +269,18 @@ public class Clinica {
     //FUNCIONES PESTANIA HISTORIAL CLINICO -----------------------------------------------------------
 
     //FUNCIONES PESTANIA FILTRAR CITAS ---------------------------------------------------------------
+
+    //FUNCIONES PARA LA ATENCION CITA ----------------------------------------------------------------
+
+    /**
+     * Crea la factura correspondiente a la atencion veterinaria ya finalizada
+     * @param atencionVeterinaria
+     * @param precio
+     * @param observaciones
+     */
+    public void crearFactura(AtencionVeterinaria atencionVeterinaria, Double precio, String observaciones) {
+        atencionVeterinaria.setEstadoAtencion(EstadoAtencion.ATENTIDA);
+        Factura factura = new Factura(precio, observaciones, atencionVeterinaria);
+        listaFacturas.add(factura);
+    }
 }

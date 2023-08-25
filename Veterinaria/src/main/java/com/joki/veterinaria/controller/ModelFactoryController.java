@@ -57,6 +57,9 @@ public class ModelFactoryController {
         Mascota mascota2 = new Mascota("Mercy", 3, SexoMascota.HEMBRA, "Criolla", TipoMascota.GATO, cliente1);
         clinica.getListaMascotas().add(mascota2);
         cliente1.getListaMascotas().add(mascota2);
+
+        AtencionVeterinaria atencionVeterinaria1 = new AtencionVeterinaria(cliente2, mascota1, veterinario1, EstadoAtencion.CREADA, "25/08/2023");
+        clinica.getListaAtencionVeterinaria().add(atencionVeterinaria1);
     }
 
     //FUNCIONES PARA EL LOGIN ----------------------------------------------------------------------
@@ -149,5 +152,17 @@ public class ModelFactoryController {
     //FUNCIONES PESTANIA HISTORIAL CLINICO --------------------------------------------------------------
 
     //FUNCIONES PESTANIA FILTRAR CITAS ------------------------------------------------------------------
+
+    //FUNCIONES PARA LA ATENCION CITA -------------------------------------------------------------------
+
+    /**
+     * Genera una factura dada por finalizada la atencion de una mascota
+     * @param atencionVeterinaria
+     * @param precio
+     * @param observaciones
+     */
+    public void crearFactura(AtencionVeterinaria atencionVeterinaria, Double precio, String observaciones) {
+        clinica.crearFactura(atencionVeterinaria, precio, observaciones);
+    }
 
 }

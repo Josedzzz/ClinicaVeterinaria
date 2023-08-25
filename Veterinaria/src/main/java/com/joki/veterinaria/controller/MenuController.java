@@ -417,6 +417,26 @@ public class MenuController implements Initializable {
         alert.showAndWait();
     }
 
+    /**
+     * Muestro el menu y actualizo los datos
+     */
+    public void show() {
+        stage.show();
+        System.out.println(veterinarioLogin.toString());
+        //Lista de clientes a mostrar
+        tableViewCliente.getItems().clear();
+        tableViewCliente.setItems(getListaClientes());
+        //Lista de mascotas a mostrar
+        tableViewMascota.getItems().clear();
+        tableViewMascota.setItems(getListaMascotas());
+        //Lista de atenciones a mostrar
+        tableViewAtenciones.getItems().clear();
+        tableViewAtenciones.setItems(getListaAtenciones());
+        //Lista de facturas a mostrar
+        tableViewFacturas.getItems().clear();
+        tableViewFacturas.setItems(getListaFacturas());
+    }
+
     //FUNCIONES PESTANIA CLIENTES ----------------------------------------------------------------
     @FXML
     void actualizarCliente(ActionEvent event) {
@@ -542,18 +562,23 @@ public class MenuController implements Initializable {
     void atenderCitaAtencion(ActionEvent event) throws IOException {
         if (atencionVeterinariaSeleccion != null) {
             if (atencionVeterinariaSeleccion.getEstadoAtencion().equals(EstadoAtencion.CREADA)) {
-                FXMLLoader loader = new FXMLLoader();
-                loader.setLocation(Application.class.getResource("/com/joki/veterinaria/AtencionCitaView.fxml"));
-                BorderPane borderPane = (BorderPane) loader.load();
-                AtencionCitaController controller = loader.getController();
-                controller.setAplicacion(application);
-                Scene scene = new Scene(borderPane);
-                Stage stage = new Stage();
-                stage.setTitle("Atender cita veterinaria");
-                stage.setScene(scene);
-                controller.init(stage, this, atencionVeterinariaSeleccion);
-                stage.show();
-                this.stage.close();
+                if (atencionVeterinariaSeleccion.getVeterinario().equals(veterinarioLogin)) {
+                    FXMLLoader loader = new FXMLLoader();
+                    loader.setLocation(Application.class.getResource("/com/joki/veterinaria/AtencionCitaView.fxml"));
+                    BorderPane borderPane = (BorderPane) loader.load();
+                    AtencionCitaController controller = loader.getController();
+                    controller.setAplicacion(application);
+                    Scene scene = new Scene(borderPane);
+                    Stage stage = new Stage();
+                    stage.setTitle("Atender cita veterinaria");
+                    stage.setScene(scene);
+                    controller.init(stage, this, atencionVeterinariaSeleccion);
+                    stage.show();
+                    this.stage.close();
+                    System.out.println(atencionVeterinariaSeleccion.toString());
+                } else {
+                    mostrarMensaje("Notificación manejo de citas", "No se puede atender la cita", "No se inicio sesión como el veterinario encargado", Alert.AlertType.WARNING);
+                }
             } else {
                 mostrarMensaje("Notificación manejo de citas", "No se puede atender la cita", "Verifique que la cita no esté cancelada o atendida", Alert.AlertType.WARNING);
             }
@@ -574,7 +599,7 @@ public class MenuController implements Initializable {
                 tableViewAtenciones.refresh();
                 mostrarMensaje("Notificación manejo de citas", "Cita cancelada", "La cita ha sido cancelada correctamente", Alert.AlertType.INFORMATION);
             } else {
-                mostrarMensaje("Notificación manejo de citas", "Cita no cancelada", "La cita no ha podido ser cancelada", Alert.AlertType.WARNING);
+                mostrarMensaje("Notificación manejo de citas", "Cita no cancelada", "La cita no ha podido ser cancelada ya que anteriormente fue atendida o cancelada", Alert.AlertType.WARNING);
             }
         } else {
             mostrarMensaje("Notificación manejo de citas", "Atención no seleccionada", "No se ha seleccionado ninguna atención", Alert.AlertType.WARNING);
