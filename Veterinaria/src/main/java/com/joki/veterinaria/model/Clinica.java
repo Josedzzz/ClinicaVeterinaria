@@ -2,6 +2,8 @@ package com.joki.veterinaria.model;
 
 import com.joki.veterinaria.exceptions.ClienteNoRegistradoException;
 import com.joki.veterinaria.exceptions.ClienteYaExistenteException;
+import com.joki.veterinaria.exceptions.MascotaNoRegistradaException;
+import com.joki.veterinaria.exceptions.MascotaYaExistenteException;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -81,6 +83,7 @@ public class Clinica {
 
     /**
      * Retorna el veterinario si encuentra los campos
+     *
      * @param nombre
      * @param codigo
      * @return
@@ -114,6 +117,11 @@ public class Clinica {
 
     //FUNCIONES PESTANIA DE CLIENTES ---------------------------------------------------------------------
 
+    /**
+     * Retorna el cliente dada su cedula
+     * @param cedula
+     * @return
+     */
     public Cliente obtenerCliente(String cedula){
         Cliente clienteEncontrado = null;
         for (Cliente cliente : listaClientes) {
@@ -124,7 +132,17 @@ public class Clinica {
         return clienteEncontrado;
     }
 
-    public boolean crearCliente(String nombre, String correo, String telefono, String cedula, String Direccion) throws ClienteYaExistenteException {
+    /**
+     * Retorna el valor booleano si se pudo crear un cliente
+     * @param nombre
+     * @param correo
+     * @param cedula
+     * @param telefono
+     * @param Direccion
+     * @return
+     * @throws ClienteYaExistenteException
+     */
+    public boolean crearCliente(String nombre, String correo, String cedula, String telefono, String Direccion) throws ClienteYaExistenteException {
         boolean fueCreado = false;
         Cliente clienteAsociado = obtenerCliente(cedula);
         if (clienteAsociado != null){
@@ -137,7 +155,16 @@ public class Clinica {
         return fueCreado;
     }
 
-    public void actualizarCliente(String nombre, String correo, String telefono, String cedula, String direccion, ArrayList listaMascotas) throws ClienteNoRegistradoException{
+    /**
+     * Actualiza los datos de un cliente
+     * @param nombre
+     * @param correo
+     * @param cedula
+     * @param telefono
+     * @param direccion
+     * @throws ClienteNoRegistradoException
+     */
+    public void actualizarCliente(String nombre, String correo, String cedula, String telefono, String direccion) throws ClienteNoRegistradoException{
         Cliente clienteEncontrado = obtenerCliente(cedula);
         if (clienteEncontrado == null) {
             throw new ClienteNoRegistradoException("El cliente no esta registrado");
@@ -145,12 +172,15 @@ public class Clinica {
             clienteEncontrado.setNombre(nombre);
             clienteEncontrado.setCorreo(correo);
             clienteEncontrado.setTelefono(telefono);
-            clienteEncontrado.setCedula(cedula);
             clienteEncontrado.setDireccion(direccion);
-            clienteEncontrado.setListaMascotas(listaMascotas);
         }
     }
 
+    /**
+     * Elimina un cliente dada su cedula
+     * @param cedula
+     * @throws ClienteNoRegistradoException
+     */
     public void eliminarCliente(String cedula) throws ClienteNoRegistradoException {
         Cliente clientePorEliminar = null;
         for (Cliente cliente : listaClientes) {
@@ -182,6 +212,70 @@ public class Clinica {
     }
 
     //FUNCIONES PESTANIA DE MASCOTAS -----------------------------------------------------------------
+
+    /**
+     * Crea una mascota
+     * @param nombre
+     * @param edad
+     * @param sexo
+     * @param raza
+     * @param tipo
+     * @param duenio
+     * @return
+     * @throws MascotaYaExistenteException
+     */
+    public boolean crearMascota(String nombre, int edad, SexoMascota sexo, String raza, TipoMascota tipo, Cliente duenio) throws MascotaYaExistenteException {
+        boolean  fueCreado = false;
+        Mascota mascotaAsociada = obtenerMascota(duenio, nombre);
+        if(mascotaAsociada != null){
+            throw new MascotaYaExistenteException("Esta mascota ya fue creada");
+        }else{
+            Mascota mascotaNueva = new Mascota(nombre,edad,sexo,raza,tipo,duenio);
+            listaMascotas.add(mascotaNueva);
+            fueCreado = true;
+        }
+        return fueCreado;
+    }
+
+    /**
+     * Actualiza los datos de una mascota
+     * @param nombre
+     * @param edad
+     * @param raza
+     * @param duenio
+     * @throws MascotaNoRegistradaException
+     */
+    public void actualizarMascota(String nombre, int edad, String raza, Cliente duenio) throws MascotaNoRegistradaException {
+        Mascota mascotaEncontrada = obtenerMascota(duenio, nombre);
+        if(mascotaEncontrada == null){
+            throw new MascotaNoRegistradaException("La mascota no esta registrada");
+        }else{
+            mascotaEncontrada.setNombre(nombre);
+            mascotaEncontrada.setEdad(edad);
+            mascotaEncontrada.setRaza(raza);
+        }
+    }
+
+    /**
+     * Elimina a una mascota de la lista de mascotas y de la lista del duenio
+     * @param nombre
+     * @param duenio
+     * @throws MascotaNoRegistradaException
+     */
+    public void eliminarMascota(String nombre, Cliente duenio) throws MascotaNoRegistradaException {
+        Mascota mascotaAEliminar = obtenerMascota(duenio, nombre);
+        for(Mascota mascota : listaMascotas){
+            if(mascota.getDuenio().equals(duenio)){
+                mascotaAEliminar = mascota;
+            }
+            if(mascotaAEliminar !=null){
+                listaMascotas.remove(mascotaAEliminar);
+                duenio.getListaMascotas().remove(mascotaAEliminar);
+            }else{
+                throw new MascotaNoRegistradaException("La mascota con duenño " + duenio + "no existe");
+            }
+        }
+    }
 
     //FUNCIONES PESTANIA ATENCION VETERINARIA --------------------------------------------------------
 
