@@ -6,6 +6,7 @@ import com.joki.veterinaria.exceptions.ClienteYaExistenteException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 public class Clinica {
     private String nombre;
@@ -279,6 +280,44 @@ public class Clinica {
     //FUNCIONES PESTANIA HISTORIAL CLINICO -----------------------------------------------------------
 
     //FUNCIONES PESTANIA FILTRAR CITAS ---------------------------------------------------------------
+
+    /**
+     * Valida que las fechas del reporte esten correctas (la fecha inicial debe ser menor a la final)
+     * @param fechaInicialFiltrar
+     * @param fechaFinalFiltrar
+     * @return
+     * @throws ParseException
+     */
+    public boolean validarFechasFiltrar(String fechaInicialFiltrar, String fechaFinalFiltrar) throws ParseException {
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yyy");
+        Date fechaInicio = simpleDateFormat.parse(fechaInicialFiltrar);
+        Date fechaFinal = simpleDateFormat.parse(fechaFinalFiltrar);
+        return fechaInicio.before(fechaFinal);
+    }
+
+    /**
+     * Retorna la lista de atenciones que esten dentro de la fecha inicial y la fecha final
+     * @param fechaInicialFiltrar
+     * @param fechaFinalFiltrar
+     * @return
+     */
+    public ArrayList<AtencionVeterinaria> getListaAtencionesFechas(String fechaInicialFiltrar, String fechaFinalFiltrar) {
+        ArrayList<AtencionVeterinaria> listaAtencionesFechas = new ArrayList<>();
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yyy");
+        try {
+            Date fechaInicio = simpleDateFormat.parse(fechaInicialFiltrar);
+            Date fechaFinal = simpleDateFormat.parse(fechaFinalFiltrar);
+            for (AtencionVeterinaria atencionVeterinaria : listaAtencionVeterinaria) {
+                Date fechaAtencion = simpleDateFormat.parse(atencionVeterinaria.getFechaAtencion());
+                if (fechaAtencion.after(fechaInicio) && fechaAtencion.before(fechaFinal)) {
+                    listaAtencionesFechas.add(atencionVeterinaria);
+                }
+            }
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return listaAtencionesFechas;
+    }
 
     //FUNCIONES PARA LA ATENCION CITA ----------------------------------------------------------------
 

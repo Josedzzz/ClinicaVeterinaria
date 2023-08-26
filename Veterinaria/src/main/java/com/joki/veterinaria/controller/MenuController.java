@@ -14,6 +14,7 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.net.URL;
+import java.text.ParseException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ResourceBundle;
@@ -252,6 +253,7 @@ public class MenuController implements Initializable {
     ObservableList<AtencionVeterinaria> listadoAtenciones = FXCollections.observableArrayList();
     private AtencionVeterinaria atencionVeterinariaSeleccion;
     ObservableList<Factura> listadoFacturas = FXCollections.observableArrayList();
+    ObservableList<AtencionVeterinaria> listadoAtencionesFiltrar = FXCollections.observableArrayList();
     private Factura facturaSeleccion;
     private String fechaInicialFiltrar;
     private String fechaFinalFiltrar;
@@ -641,14 +643,44 @@ public class MenuController implements Initializable {
 
     //FUNCIONES PARA PESTANIA FILTRAR CITAS -----------------------------------------------------------
 
+    /**
+     * Filtra las citas dada una fecha inicial y una fecha final
+     * @param event
+     */
     @FXML
     void generarFiltrar(ActionEvent event) {
+        if (fechaInicialFiltrar != null && fechaFinalFiltrar != null) {
+            try {
+                if (mfm.validarFechasFiltrar(fechaInicialFiltrar, fechaFinalFiltrar)) {
+                    tableViewFiltrar.getItems().clear();
+                    tableViewFiltrar.setItems(getListaAtencionesFechas(fechaInicialFiltrar, fechaFinalFiltrar));
+                }
+            } catch (ParseException e) {
+                mostrarMensaje("Notificación filtrar citas", "Fechas invalidas", "Ocurrió un erro con las fechas ingresadas", Alert.AlertType.WARNING);
+            }
+        } else {
+            mostrarMensaje("Notificación filtrar citas", "Fechas no seleccionadas", "Por favor seleccionar las fechas", Alert.AlertType.WARNING);
+        }
+    }
 
+    /**
+     * Obtengo la lista de atenciones veterinarias filtradas por una fecha inicial y una fecha final
+     * @param fechaInicialFiltrar
+     * @param fechaFinalFiltrar
+     * @return
+     */
+    private ObservableList<AtencionVeterinaria> getListaAtencionesFechas(String fechaInicialFiltrar, String fechaFinalFiltrar) {
+        listadoAtencionesFiltrar.addAll(mfm.getListaAtencionesFechas(fechaInicialFiltrar, fechaFinalFiltrar));
+        return listadoAtencionesFiltrar;
     }
 
 
+    /**
+     * Reinicia los elementos de la tabla a filtrar haciendole un clear a la tabla
+     * @param event
+     */
     @FXML
     void reiniciarFiltrar(ActionEvent event) {
-
+        tableViewFiltrar.getItems().clear();
     }
 }

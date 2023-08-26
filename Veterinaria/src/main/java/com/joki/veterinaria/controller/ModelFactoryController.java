@@ -2,6 +2,8 @@ package com.joki.veterinaria.controller;
 
 import com.joki.veterinaria.model.*;
 
+import java.text.ParseException;
+import java.util.ArrayList;
 import java.util.List;
 
 public class ModelFactoryController {
@@ -162,6 +164,27 @@ public class ModelFactoryController {
     //FUNCIONES PESTANIA HISTORIAL CLINICO --------------------------------------------------------------
 
     //FUNCIONES PESTANIA FILTRAR CITAS ------------------------------------------------------------------
+
+    /**
+     * Valida que la fecha inicial sea menor a la fecha final
+     * @param fechaInicialFiltrar
+     * @param fechaFinalFiltrar
+     * @return
+     */
+    public boolean validarFechasFiltrar(String fechaInicialFiltrar, String fechaFinalFiltrar) throws ParseException {
+        return clinica.validarFechasFiltrar(fechaInicialFiltrar, fechaFinalFiltrar);
+    }
+
+    /**
+     * Retorna el arrayList con las atenciones correspondientes a las fechas seleccionadas
+     * @param fechaInicialFiltrar
+     * @param fechaFinalFiltrar
+     * @return
+     */
+    public ArrayList<AtencionVeterinaria> getListaAtencionesFechas(String fechaInicialFiltrar, String fechaFinalFiltrar) {
+        ArrayList<AtencionVeterinaria> listaAtencionesFechas = clinica.getListaAtencionesFechas(fechaInicialFiltrar, fechaFinalFiltrar);
+        return listaAtencionesFechas;
+    }
 
     //FUNCIONES PARA LA ATENCION CITA -------------------------------------------------------------------
 
