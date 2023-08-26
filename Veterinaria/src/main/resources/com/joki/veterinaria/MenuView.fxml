@@ -73,6 +73,11 @@
                                           <Font name="Ubuntu Bold Italic" size="14.0" />
                                        </font>
                                     </Button>
+                                    <Button fx:id="btnCerrarSesion" layoutX="560.0" layoutY="9.0" mnemonicParsing="false" onAction="#cerrarSesion" prefHeight="26.0" prefWidth="111.0" style="-fx-background-color: #228cd8;" text="Cerrar Sesion" textFill="#f2fdff">
+                                       <font>
+                                          <Font name="Ubuntu Bold Italic" size="14.0" />
+                                       </font>
+                                    </Button>
                                  </children>
                               </AnchorPane>
                             <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0" style="-fx-background-color: #228cd8;">

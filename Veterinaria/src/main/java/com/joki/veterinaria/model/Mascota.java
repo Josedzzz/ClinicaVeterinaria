@@ -1,5 +1,7 @@
 package com.joki.veterinaria.model;
 
+import java.util.Objects;
+
 public class Mascota {
     private String nombre;
     private int edad;
@@ -68,4 +70,5 @@ public class Mascota {
     public void setDuenio(Cliente duenio) {
         this.duenio = duenio;
     }
+
 }

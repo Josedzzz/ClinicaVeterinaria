@@ -9,6 +9,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 
@@ -26,6 +27,9 @@ public class MenuController implements Initializable {
     ModelFactoryController mfm = ModelFactoryController.getInstance();
 
     //VARIABLES PESTANIA CLIENTES --------------------------------------------------------------------------------
+
+    @FXML
+    private Button btnCerrarSesion;
 
     @FXML
     private Button btnActualizarCliente;
@@ -450,6 +454,13 @@ public class MenuController implements Initializable {
     }
 
     //FUNCIONES PESTANIA CLIENTES ----------------------------------------------------------------
+
+    @FXML
+    void cerrarSesion(ActionEvent event) {
+        this.stage.close();
+        loginController.show();
+    }
+
     @FXML
     void actualizarCliente(ActionEvent event) {
 
@@ -636,9 +647,55 @@ public class MenuController implements Initializable {
 
     //FUNCIONES PARA PESTANIA HISTORIAL CLINICO -------------------------------------------------------
 
+    /**
+     * Abre una ventana en donde se ve el historial clinico de la mascota
+     * Paso como parametro la mascota a la cual deseo ver la informacion
+     * @param event
+     */
     @FXML
-    void generarHistorial(ActionEvent event) {
+    void generarHistorial(ActionEvent event) throws IOException {
+        String cedula = txtCedulaClienteHistorial.getText();
+        String nombreMascota = txtNombreMascotaHistorial.getText();
+        if (datosValidosHistorial(cedula, nombreMascota))  {
+            Mascota mascotaHistorial = mfm.obtenerMascotaHistorial(cedula, nombreMascota);
+            if (mascotaHistorial != null) {
+                FXMLLoader loader = new FXMLLoader();
+                loader.setLocation(Application.class.getResource("/com/joki/veterinaria/HistorialClinicoView.fxml"));
+                BorderPane borderPane = (BorderPane) loader.load();
+                HistorialClinicoController controller = loader.getController();
+                controller.setApplication(application);
+                Scene scene = new Scene(borderPane);
+                Stage stage = new Stage();
+                stage.setTitle("Historial clinico de la mascota");
+                stage.setScene(scene);
+                controller.init(stage, this, mascotaHistorial);
+                stage.show();
+                this.stage.close();
+            } else {
+                mostrarMensaje("Notificación historial", "Datos invalidos", "Por favor verifique que los datos ingresados sean correctos", Alert.AlertType.WARNING);
+            }
+        }
+    }
 
+    /**
+     * Verifica que los datos para el historial no esten vacios
+     * @param cedula
+     * @param nombreMascota
+     * @return
+     */
+    private boolean datosValidosHistorial(String cedula, String nombreMascota) {
+        String notificacion = "";
+        if (cedula == null || cedula.equals("")) {
+            notificacion += "Ingrese la cedula del dueño";
+        }
+        if (nombreMascota == null || nombreMascota.equals("")) {
+            notificacion += "Ingrese el nombre de la mascota";
+        }
+        if (notificacion.equals("")) {
+            return true;
+        }
+        mostrarMensaje("Notificación historial", "Información para generar el historial invalida", notificacion, Alert.AlertType.WARNING);
+        return false;
     }
 
     //FUNCIONES PARA PESTANIA FILTRAR CITAS -----------------------------------------------------------

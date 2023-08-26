@@ -163,6 +163,17 @@ public class ModelFactoryController {
 
     //FUNCIONES PESTANIA HISTORIAL CLINICO --------------------------------------------------------------
 
+    /**
+     * Obtengo la mascota correspondiente al duenio
+     * @param cedula
+     * @param nombreMascota
+     * @return
+     */
+    public Mascota obtenerMascotaHistorial(String cedula, String nombreMascota) {
+        Mascota mascotaHistorial = clinica.obtenerMascotaHistorial(cedula, nombreMascota);
+        return mascotaHistorial;
+    }
+
     //FUNCIONES PESTANIA FILTRAR CITAS ------------------------------------------------------------------
 
     /**
@@ -196,6 +207,17 @@ public class ModelFactoryController {
      */
     public void crearFactura(AtencionVeterinaria atencionVeterinaria, Double precio, String observaciones) {
         clinica.crearFactura(atencionVeterinaria, precio, observaciones);
+    }
+
+    //FUNCIONES PARA EL HISTORIAL CLINICO
+
+    /**
+     * Obtengo el historial de facturas de una mascota
+     * @return
+     */
+    public ArrayList<Factura> getHistorialMascota(Mascota mascotaHistorial) {
+        ArrayList<Factura> listadoMascotaHistorial = clinica.getHistorialMascota(mascotaHistorial);
+        return listadoMascotaHistorial;
     }
 
 }

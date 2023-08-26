@@ -48,6 +48,12 @@ public class LoginController implements Initializable {
         this.stage = stage;
     }
 
+    public void show() {
+        stage.show();
+        txtCodigoLogin.setText("");
+        txtNombreLogin.setText("");
+    }
+
     /**
      * Muestra un mensaje dependiendo el tipo de alerta seleccionado
      * @param title

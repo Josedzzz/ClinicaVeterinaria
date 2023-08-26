@@ -279,6 +279,21 @@ public class Clinica {
 
     //FUNCIONES PESTANIA HISTORIAL CLINICO -----------------------------------------------------------
 
+    /**
+     * Obtengo la mascota correspondiente a la cedula del duenio y a el nombre de la misma
+     * @param cedula
+     * @param nombreMascota
+     * @return
+     */
+    public Mascota obtenerMascotaHistorial(String cedula, String nombreMascota) {
+        Cliente clienteEncontrado = obtenerCliente(cedula);
+        Mascota mascotaEncontrada = null;
+        if (clienteEncontrado != null) {
+            mascotaEncontrada = obtenerMascota(clienteEncontrado, nombreMascota);
+        }
+        return mascotaEncontrada;
+    }
+
     //FUNCIONES PESTANIA FILTRAR CITAS ---------------------------------------------------------------
 
     /**
@@ -331,5 +346,22 @@ public class Clinica {
         atencionVeterinaria.setEstadoAtencion(EstadoAtencion.ATENTIDA);
         Factura factura = new Factura(precio, observaciones, atencionVeterinaria);
         listaFacturas.add(factura);
+    }
+
+    //FUNCIONES PARA EL HISTORIAL CLINICO -------------------------------------------------------------
+
+    /**
+     * Retorna un array de las facturas correspondientes a una mascota
+     * @param mascotaHistorial
+     * @return
+     */
+    public ArrayList<Factura> getHistorialMascota(Mascota mascotaHistorial) {
+        ArrayList<Factura> listadoMascotaHistorial = new ArrayList<Factura>();
+        for (Factura factura : listaFacturas) {
+            if (factura.getAtencionVeterinaria().getMascota().getNombre().equals(mascotaHistorial.getNombre()) && factura.getAtencionVeterinaria().getMascota().getDuenio().equals(mascotaHistorial.getDuenio())) {
+                listadoMascotaHistorial.add(factura);
+            }
+        }
+        return listadoMascotaHistorial;
     }
 }
