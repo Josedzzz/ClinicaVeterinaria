@@ -1,15 +1,15 @@
 package com.joki.veterinaria.model;
 
-import java.time.LocalDate;
+import java.util.Objects;
 
 public class AtencionVeterinaria {
     private Cliente cliente;
     private Mascota mascota;
     private Veterinario veterinario;
     private EstadoAtencion estadoAtencion;
-    private LocalDate fechaAtencion;
+    private String fechaAtencion;
 
-    public AtencionVeterinaria(Cliente cliente, Mascota mascota, Veterinario veterinario, EstadoAtencion estadoAtencion, LocalDate fechaAtencion) {
+    public AtencionVeterinaria(Cliente cliente, Mascota mascota, Veterinario veterinario, EstadoAtencion estadoAtencion, String fechaAtencion) {
         this.cliente = cliente;
         this.mascota = mascota;
         this.veterinario = veterinario;
@@ -53,11 +53,35 @@ public class AtencionVeterinaria {
         this.estadoAtencion = estadoAtencion;
     }
 
-    public LocalDate getFechaAtencion() {
+    public String getFechaAtencion() {
         return fechaAtencion;
     }
 
-    public void setFechaAtencion(LocalDate fechaAtencion) {
+    public void setFechaAtencion(String fechaAtencion) {
         this.fechaAtencion = fechaAtencion;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        AtencionVeterinaria that = (AtencionVeterinaria) o;
+        return Objects.equals(cliente, that.cliente) && Objects.equals(mascota, that.mascota) && Objects.equals(veterinario, that.veterinario) && estadoAtencion == that.estadoAtencion && Objects.equals(fechaAtencion, that.fechaAtencion);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(cliente, mascota, veterinario, estadoAtencion, fechaAtencion);
+    }
+
+    @Override
+    public String toString() {
+        return "AtencionVeterinaria{" +
+                "cliente=" + cliente +
+                ", mascota=" + mascota +
+                ", veterinario=" + veterinario +
+                ", estadoAtencion=" + estadoAtencion +
+                ", fechaAtencion='" + fechaAtencion + '\'' +
+                '}';
     }
 }

@@ -7,11 +7,11 @@ public class Cliente extends Persona {
     private String direccion;
     private ArrayList<Mascota> listaMascotas;
 
-    public Cliente(String nombre, String correo, String telefono, String cedula, String direccion, ArrayList<Mascota> listaMascotas) {
+    public Cliente(String nombre, String correo, String telefono, String cedula, String direccion) {
         super(nombre, correo, telefono);
         this.cedula = cedula;
         this.direccion = direccion;
-        this.listaMascotas = listaMascotas;
+        this.listaMascotas = new ArrayList<Mascota>();
     }
 
     public String getCedula() {
