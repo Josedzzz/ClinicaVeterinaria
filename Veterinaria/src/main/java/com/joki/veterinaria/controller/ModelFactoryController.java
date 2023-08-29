@@ -1,5 +1,9 @@
 package com.joki.veterinaria.controller;
 
+import com.joki.veterinaria.exceptions.ClienteNoRegistradoException;
+import com.joki.veterinaria.exceptions.ClienteYaExistenteException;
+import com.joki.veterinaria.exceptions.MascotaNoRegistradaException;
+import com.joki.veterinaria.exceptions.MascotaYaExistenteException;
 import com.joki.veterinaria.model.*;
 
 import java.text.ParseException;
@@ -80,6 +84,21 @@ public class ModelFactoryController {
 
     //FUNCIONES PESTANIA CLIENTES -------------------------------------------------------------------
 
+    /*
+    Actualiza todos los datos del cliente
+    */
+    public void actualizarCliente(String nombre, String correo, String cedula, String telefono, String direccion) throws ClienteNoRegistradoException {
+        clinica.actualizarCliente(nombre, correo, cedula, telefono, direccion);
+    }
+
+    /*
+    Crea los datos para cliente
+    */
+    public boolean crearCliente(String nombre, String correo, String cedula, String telefono, String direccion) throws ClienteYaExistenteException {
+        return this.clinica.crearCliente(nombre, correo, cedula, telefono, direccion);
+    }
+
+
     /**
      * Obtengo la lista de clientes
      * @return
@@ -89,6 +108,21 @@ public class ModelFactoryController {
     }
 
     //FUNCIONES PESTANIA MASCOTAS -------------------------------------------------------------------
+
+    /*
+    Actualizar todos los datos de la mascota
+     */
+    public void actualizarMascota(String nombre, int edad,String raza,Cliente duenio) throws MascotaNoRegistradaException {
+        clinica.actualizarMascota(nombre,edad,raza,duenio);
+    }
+
+    /*
+    Crea los datos para mascota
+    */
+    public boolean crearMascota(String nombre, int edad, SexoMascota sexo, String raza, TipoMascota tipo, Cliente duenio) throws MascotaYaExistenteException {
+        return this.clinica.crearMascota(nombre,edad,sexo,raza,tipo,duenio);
+    }
+
 
     /**
      * Obtengo la lista de mascotas
@@ -219,5 +253,6 @@ public class ModelFactoryController {
         ArrayList<Factura> listadoMascotaHistorial = clinica.getHistorialMascota(mascotaHistorial);
         return listadoMascotaHistorial;
     }
+
 
 }

@@ -1,6 +1,10 @@
 package com.joki.veterinaria.controller;
 
 import com.joki.veterinaria.application.Application;
+import com.joki.veterinaria.exceptions.ClienteNoRegistradoException;
+import com.joki.veterinaria.exceptions.ClienteYaExistenteException;
+import com.joki.veterinaria.exceptions.MascotaNoRegistradaException;
+import com.joki.veterinaria.exceptions.MascotaYaExistenteException;
 import com.joki.veterinaria.model.*;
 import javafx.beans.property.ReadOnlyStringWrapper;
 import javafx.collections.FXCollections;
@@ -144,7 +148,7 @@ public class MenuController implements Initializable {
     private TextField txtCedulaClienteAtencion;
 
     @FXML
-    private TextField txtCodigoVeterinarioAtencion;
+    private ComboBox<String> comboBoxCodigoVeterinario;
 
     @FXML
     private TextField txtNombreMascotaAtencion;
@@ -275,6 +279,9 @@ public class MenuController implements Initializable {
         tableViewCliente.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
             if (newSelection != null) {
                 clienteSeleccion = newSelection;
+                clienteSeleccion = tableViewCliente.getSelectionModel().getSelectedItem();
+                llenarCamposCliente(clienteSeleccion);
+                txtCedulaCliente.setDisable(true);
             }
         });
 
@@ -292,14 +299,25 @@ public class MenuController implements Initializable {
         //Seleccion de mascotas en la tabla
         tableViewMascota.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
             if (newSelection != null) {
+                System.out.println(newSelection);
                 mascotaSeleccion = newSelection;
+                mascotaSeleccion = tableViewMascota.getSelectionModel().getSelectedItem();
+                llenarCamposMascota(mascotaSeleccion,clienteSeleccion);
             }
         });
+
+
+        //Manejo de comboBox de codigos de los veterinarios en la pestania Atencion veterinaria
+        Veterinario[] listaVeter = mfm.clinica.getListaVeterinarios();
+        for(Veterinario veterinario : listaVeter){
+            comboBoxCodigoVeterinario.getItems().add(veterinario.getCodigo());
+        }
 
         //Datos del comboBox de sexo mascotas
         this.comboBoxSexoMascota.getItems().addAll(SexoMascota.values());
         //Datos del comboBox de tipo mascotas
         this.comboBoxTipoMascota.getItems().addAll(TipoMascota.values());
+
 
         //Manejo de la fecha para atenciones veterinarias
         datePickerFechaAtencion.setOnAction(event -> {
@@ -461,51 +479,342 @@ public class MenuController implements Initializable {
         loginController.show();
     }
 
-    @FXML
-    void actualizarCliente(ActionEvent event) {
-
+    /*
+    Limpia los textFields despues de ser seleccionados
+     */
+    public void limpiarCamposCliente(){
+        txtNombreCliente.clear();
+        txtCedulaCliente.clear();
+        txtCorreoCliente.clear();
+        txtDireccionCliente.clear();
+        txtTelefonoCliente.clear();
     }
 
-    @FXML
-    void aniadirCliente(ActionEvent event) {
-
+    /*
+    Setea los datos seleccionados de la table view para ser mostrados
+     */
+    public void llenarCamposCliente(Cliente clienteSeleccion) {
+        txtNombreCliente.setText(clienteSeleccion.getNombre());
+        txtCedulaCliente.setText(clienteSeleccion.getCedula());
+        txtCorreoCliente.setText(clienteSeleccion.getCorreo());
+        txtDireccionCliente.setText(clienteSeleccion.getDireccion());
+        txtTelefonoCliente.setText(clienteSeleccion.getTelefono());
     }
 
+    /*
+    Setea los datos vacios del cliente para crearlo
+     */
     @FXML
-    void eliminarCliente(ActionEvent event) {
+    void nuevoCliente(ActionEvent event) {
+        txtCedulaCliente.setDisable(false);
+        txtNombreCliente.setText("");
+        txtCedulaCliente.setText("");
+        txtCorreoCliente.setText("");
+        txtTelefonoCliente.setText("");
+        txtDireccionCliente.setText("");
+        clienteSeleccion = null;
+    }
+    /*
+    Actualiza los datos de un cliente seleccionado
+     */
+    @FXML
+    void actualizarCliente(ActionEvent event) throws ClienteNoRegistradoException {
+        String nombre = txtNombreCliente.getText();
+        String correo = txtCorreoCliente.getText();
+        String cedula = txtCedulaCliente.getText();
+        String telefono = txtTelefonoCliente.getText();
+        String direccion = txtDireccionCliente.getText();
+        if(clienteSeleccion != null){
+            if(datosValidosCliente(nombre,correo,cedula,telefono,direccion)){
+                mfm.actualizarCliente(nombre,correo,cedula,telefono,direccion);
+                //Actualizo los datos en la interfaz
+                clienteSeleccion.setNombre(nombre);
+                clienteSeleccion.setCorreo(correo);
+                clienteSeleccion.setCedula(cedula);
+                clienteSeleccion.setTelefono(telefono);
+                clienteSeleccion.setDireccion(direccion);
+                //Actualizo la table view
+                tableViewCliente.refresh();
+                mostrarMensaje("Notificacion Veterinaria", "Cliente Actualizado","El cliente " + nombre +
+                        " ha sido actualizado", Alert.AlertType.WARNING);
+            }else{
+                mostrarMensaje("Notificacion Veterinaria", "Cliente no seleccionado", "No se ha seleccionado " +
+                        "ningun cliente", Alert.AlertType.WARNING);
+            }
+        }
+    }
+    /*
+    Verifica que los datos del cliente no esten vacio
+     */
+    private boolean datosValidosCliente(String nombre, String correo, String cedula, String telefono, String direccion) {
+        String notifiacaion = "";
+        if(nombre == null || nombre.equals("")){
+            notifiacaion += "El nombre es invalido\n";
+        }
+        if(correo == null || correo.equals("")){
+            notifiacaion += "El correo es invalido\n";
+        }
+        if(cedula == null || cedula.equals("")){
+            notifiacaion += "La cedula es invalida\n";
+        }
+        if(telefono == null || telefono.equals("")){
+            notifiacaion += "El telefono es invalido\n";
+        }
+        if(direccion == null || direccion.equals("")){
+            notifiacaion += "La direccion es invalida\n";
+        }
+        //Si no hay notificacion los datos son validos
+        if(notifiacaion.equals("")){
+            return true;
+        }
+        mostrarMensaje("Notificacion Clinica", "Infacion del cliente invalida", notifiacaion, Alert.AlertType.WARNING);
+        return false;
+    }
 
+    /*
+    Registra el cliente si los datos son validos (llama a crear cliente)
+     */
+    @FXML
+    void aniadirCliente(ActionEvent event) throws ClienteYaExistenteException {
+        txtCedulaCliente.setDisable(false);
+        String nombre = txtNombreCliente.getText();
+        String correo = txtCorreoCliente.getText();
+        String cedula = txtCedulaCliente.getText();
+        String telefono = txtTelefonoCliente.getText();
+        String direccion = txtDireccionCliente.getText();
+        if(datosValidosCliente(nombre, correo, cedula, telefono,direccion)){
+            crearCliente(nombre, correo, cedula, telefono, direccion);
+            limpiarCamposCliente();
+            ObservableList<String> clientesNuevos = FXCollections.observableArrayList(cedula);
+        }
+    }
+    /*
+    Crea un cliente con los datos simepre y cuando no se repitan
+     */
+    private void crearCliente(String nombre, String correo, String cedula, String telefono, String direccion) {
+        boolean fueCreado;
+        try{
+            fueCreado = mfm.crearCliente(nombre, correo, cedula, telefono, direccion);
+            if(fueCreado){
+                //Añado cliente a la table view
+                tableViewCliente.getItems().clear();
+                tableViewCliente.setItems(getListaClientes());
+                mostrarMensaje("Notificacion Veterinaria", "Cliente Registrado", "El cliente " + nombre +
+                        " ha sido registrado", Alert.AlertType.WARNING);
+            }
+        }catch (ClienteYaExistenteException e){
+            mostrarMensaje("Notificacion Veterinaria", "Cliente no registrado", "El cliente con cedula" + cedula +
+                    " ya existe", Alert.AlertType.WARNING);
+        }
+    }
+
+    /*
+    Elimina a un cliente selccionado en la table view
+     */
+    @FXML
+    void eliminarCliente(ActionEvent event) throws ClienteNoRegistradoException{
+        txtCedulaCliente.setDisable(false);
+        String nombre = txtNombreCliente.getText();
+        clienteSeleccion = tableViewCliente.getSelectionModel().getSelectedItem();
+        if(clienteSeleccion != null){
+            listadoClientes.remove(clienteSeleccion);
+            mostrarMensaje("Norificacion Veterinaria", "Cliente eliminado", "El cliente " + nombre +
+                    "ha sido eliminado", Alert.AlertType.WARNING );
+            limpiarCamposCliente();
+        }else{
+            mostrarMensaje("Notificacion Veterinaria","Cliente eliminado", "Ningun cliente" +
+                    "ha sido seleccionado", Alert.AlertType.WARNING);
+        }
     }
 
     @FXML
     void mostrarMascotaCliente(ActionEvent event) {
-
-    }
-
-    @FXML
-    void nuevoCliente(ActionEvent event) {
-
+        if(clienteSeleccion != null){
+            for (Mascota mascota : listadoMascotas) {
+                mostrarMensaje("Notificacion Veterinaria", "Lista mascotas", mascota.getNombre() +","+ clienteSeleccion.getCedula(), Alert.AlertType.INFORMATION);
+                //recorrer la lista y sacar los atributos importantes y concatenarlos en un string
+            }
+        }else{
+            tableViewMascota.getItems().clear();
+            mostrarMensaje("Notificacion Veterinaria", "Cliente no seleccionado", "No se selcciono " +
+                    "ningun cliente", Alert.AlertType.WARNING);
+        }
     }
 
     //FUNCIONES PARA PESTANIA DE MASCOTAS ------------------------------------------------------------
 
-    @FXML
-    void actualizarMascota(ActionEvent event) {
-
+    /*
+    Limpia los textFields despues de ser seleccionados
+     */
+    public void limpiarCamposMascota(){
+        txtNombreMascota.clear();
+        txtEdadMascota.clear();
+        txtRazaMascota.clear();
+        txtCedulaMascota.clear();
+        comboBoxTipoMascota.getSelectionModel().clearSelection();
+        comboBoxSexoMascota.getSelectionModel().clearSelection();
     }
 
-    @FXML
-    void aniadirMascota(ActionEvent event) {
-
+    /*
+   Setea los datos seleccionados en la table view para ser mostrados
+    */
+    public void llenarCamposMascota(Mascota mascotaSeleccion, Cliente clienteSeleccion) {
+        String edadString = Integer.toString(mascotaSeleccion.getEdad());
+        txtNombreMascota.setText(mascotaSeleccion.getNombre());
+        txtEdadMascota.setText(edadString);
+        txtRazaMascota.setText(mascotaSeleccion.getRaza());
+        txtCedulaMascota.setText(clienteSeleccion.getCedula());
+        comboBoxSexoMascota.getSelectionModel().select(mascotaSeleccion.getSexo());
+        comboBoxTipoMascota.getSelectionModel().select(mascotaSeleccion.getTipo());
     }
 
-    @FXML
-    void eliminarMascota(ActionEvent event) {
-
-    }
-
+    /*
+    Setea los datos vacios del cliente para crearlo
+     */
     @FXML
     void nuevaMascota(ActionEvent event) {
+        txtNombreMascota.setText("");
+        txtEdadMascota.setText("");
+        txtRazaMascota.setText("");
+        txtCedulaMascota.setText("");
+        comboBoxSexoMascota.setValue(null);
+        comboBoxTipoMascota.setValue(null);
+        mascotaSeleccion = null;
+    }
 
+    /*
+    Actualiza los datos de una mascota
+     */
+    @FXML
+    void actualizarMascota(ActionEvent event) throws MascotaNoRegistradaException {
+        String nombre = txtNombreMascota.getText();
+        int edad = Integer.parseInt(txtEdadMascota.getText());
+        String raza = txtRazaMascota.getText();
+        String cedulaCliente = txtCedulaMascota.getText();
+
+        Cliente cliente = mfm.clinica.obtenerCliente(cedulaCliente);
+
+        TipoMascota tipo = comboBoxTipoMascota.getValue();
+        SexoMascota sexo = comboBoxSexoMascota.getValue();
+        if(mascotaSeleccion != null){
+            if(datosValidosMascota(nombre, String.valueOf(edad),raza,cedulaCliente,sexo,tipo)){
+                mfm.actualizarMascota(nombre,edad,raza,cliente);
+                //Actualiza los datos de la interfaz
+                mascotaSeleccion.setNombre(nombre);
+                mascotaSeleccion.setEdad(edad);
+                mascotaSeleccion.setRaza(raza);
+                //Actualiza los datos de la tabla de mascotas
+                tableViewMascota.refresh();
+                mostrarMensaje("Notificacion Veterinaria", "Mascota Actualizada", "La mascota " + nombre +
+                        "ha sido actualizado", Alert.AlertType.WARNING);
+            }
+        }else{
+            mostrarMensaje("Notificacion Veterinaria","Mascota no seleccionada", "No se ha seleccionado" +
+                    " ningunca mascota", Alert.AlertType.WARNING);
+        }
+    }
+
+    /*
+    Verifica que los datos de mascotas no esten vacios
+     */
+    private boolean datosValidosMascota(String nombre, String edad, String raza, String cedulaMascota, SexoMascota sexo, TipoMascota tipo) {
+
+        String notificacion = "";
+        if(nombre == null || nombre.equals("")){
+            notificacion += "El nombre es invalido";
+        }
+        if(edad == null || edad.equals("")){
+            notificacion += "La edad es invalida";
+        }
+        if(raza == null || raza.equals("")){
+            notificacion += "La raza es invalida";
+        }
+        if(cedulaMascota == null || cedulaMascota.equals("")){
+            notificacion += "La cedula es invalida";
+        }
+        if(tipo == null){
+            notificacion += "El tipo es invalido";
+            return false;
+        }
+        if(sexo == null){
+            notificacion += "El sexo es invalido";
+            return false;
+        }
+        //Si no hay notificacion los datos son validos
+        if(notificacion.equals("")) {
+            return true;
+        }
+        mostrarMensaje("Notificacion Veterinaria", "Mascota invalida", notificacion, Alert.AlertType.WARNING);
+        return false;
+    }
+
+    /*
+    Registra la mascota si los datos son validos (llama a crear la mascota)
+     */
+    @FXML
+    void aniadirMascota(ActionEvent event) throws MascotaYaExistenteException {
+        txtCedulaMascota.setDisable(false);
+        String nombre = txtNombreMascota.getText();
+        int edad = Integer.parseInt(txtEdadMascota.getText());
+        String raza = txtRazaMascota.getText();
+        String cedulaDuenioMascota = txtCedulaMascota.getText();
+        Cliente duenio = mfm.clinica.obtenerCliente(cedulaDuenioMascota);
+
+        if(duenio != null) {
+
+            TipoMascota tipo = comboBoxTipoMascota.getValue();
+            SexoMascota sexo = comboBoxSexoMascota.getValue();
+
+            if (datosValidosMascota(nombre, String.valueOf(edad), raza, cedulaDuenioMascota, sexo, tipo)) {
+                crearMascota(nombre, edad, sexo, raza, tipo, duenio);
+                limpiarCamposMascota();
+                tableViewCliente.getSelectionModel().clearSelection();
+            }
+        }else{
+            mostrarMensaje("Error dueño", "Error dueño", "La cédula del cliente no existe", Alert.AlertType.ERROR);
+        }
+    }
+
+    /*
+    Crea una mascota con todos los datos siempre y cuando la cedula no se repita
+     */
+    private void crearMascota(String nombre,int edad,SexoMascota sexo,String raza,TipoMascota tipo, Cliente duenio) {
+        boolean fueCreado;
+        try {
+            fueCreado = mfm.crearMascota(nombre,edad,sexo,raza,tipo,duenio);
+            if(fueCreado){
+                //Añade las mascota a la tabla de mascotas
+                tableViewMascota.getItems().clear();
+                tableViewMascota.setItems(getListaMascotas());
+                mostrarMensaje("Notificacion Mascota","Mascota creada", "La mascota " + nombre +
+                        " ha sido creado", Alert.AlertType.WARNING);
+            }
+        }catch (MascotaYaExistenteException e){
+            mostrarMensaje("Notificacion Mascota","Mascota no creada", "La mascota " + nombre +
+                    " Ya exsite", Alert.AlertType.WARNING);
+        }
+
+    }
+
+    //comboBoxTipoMascota.setValue( capturar tipo mascota );
+
+    /*
+   Elemina a una mascota selccionado en la table view
+    */
+    @FXML
+    void eliminarMascota(ActionEvent event) throws MascotaNoRegistradaException {
+        String cedulaMascota = txtCedulaMascota.getText();
+        mascotaSeleccion = tableViewMascota.getSelectionModel().getSelectedItem();
+        if(mascotaSeleccion != null){
+            listadoMascotas.remove(mascotaSeleccion);
+            mostrarMensaje("Norificacion Veterinaria", "Mascota eliminada", "La mascota " + cedulaMascota +
+                    " ha sido eliminada", Alert.AlertType.WARNING );
+            limpiarCamposMascota();
+        }else{
+            mostrarMensaje("Notificacion Veterinaria","Mascota eliminada", "Ninguna mascota " +
+                    " ha sido seleccionada", Alert.AlertType.WARNING);
+        }
+        listadoMascotas.remove(mascotaSeleccion);
     }
 
     //FUNCIONES PARA PESTANIA DE ATENCION VETERINARIA ------------------------------------------------
@@ -514,7 +823,7 @@ public class MenuController implements Initializable {
     void generarCitaAtencion(ActionEvent event) {
         String cedulaCliente = txtCedulaClienteAtencion.getText();
         String nombreMascota = txtNombreMascotaAtencion.getText();
-        String codigoVeterinario = txtCodigoVeterinarioAtencion.getText();
+        String codigoVeterinario = comboBoxCodigoVeterinario.getSelectionModel().getSelectedItem();
         if (datosValidosAtencion(cedulaCliente, nombreMascota, codigoVeterinario, fechaAtencion)) {
             generarCitaAtencion(cedulaCliente, nombreMascota, codigoVeterinario, fechaAtencion);
         }
@@ -567,7 +876,7 @@ public class MenuController implements Initializable {
             tableViewAtenciones.setItems(getListaAtenciones());
             txtCedulaClienteAtencion.setText("");
             txtNombreMascotaAtencion.setText("");
-            txtCodigoVeterinarioAtencion.setText("");
+            comboBoxCodigoVeterinario.setValue(null);
             mostrarMensaje("Notificación atención", "Atención generada correctamente", "La cita ya se encuentra en el sistema", Alert.AlertType.CONFIRMATION);
         } else {
             mostrarMensaje("Notificación atención", "Información no valida", fueGenerada, Alert.AlertType.WARNING);

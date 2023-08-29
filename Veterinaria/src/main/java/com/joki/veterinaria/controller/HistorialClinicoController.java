@@ -48,7 +48,6 @@ public class HistorialClinicoController implements Initializable {
 
     @FXML
     private TextField txtSexoHistorial;
-
     @FXML
     private TextField txtTipoMascotaHistorial;
 
@@ -104,5 +103,4 @@ public class HistorialClinicoController implements Initializable {
         this.stage.close();
         menuController.show();
     }
-
 }

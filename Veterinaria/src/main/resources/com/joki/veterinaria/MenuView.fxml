@@ -220,12 +220,8 @@
                                                         <Font name="Ubuntu Bold Italic" size="14.0" />
                                                     </font>
                                                 </Button>
-                                                <TextField fx:id="txtCodigoVeterinarioAtencion" layoutX="88.0" layoutY="61.0" promptText="Código del veterinario" style="-fx-background-color: transparent; -fx-border-color: #f2fdff; -fx-border-width: 0px 0px 2px 0px;">
-                                                    <font>
-                                                        <Font name="Ubuntu Bold Italic" size="14.0" />
-                                                    </font>
-                                                </TextField>
                                                 <DatePicker fx:id="datePickerFechaAtencion" layoutX="76.0" layoutY="158.0" promptText="Fecha atención" />
+                                                <ComboBox fx:id="comboBoxCodigoVeterinario" layoutX="82.0" layoutY="76.0" prefHeight="26.0" prefWidth="162.0" promptText="Codigo del veterinario" />
                                             </children>
                                         </AnchorPane>
                                     </items>

@@ -2,6 +2,11 @@ package com.joki.veterinaria.controller;
 
 import com.joki.veterinaria.application.Application;
 import com.joki.veterinaria.model.AtencionVeterinaria;
+import com.joki.veterinaria.model.Factura;
+import com.joki.veterinaria.model.Mascota;
+import javafx.beans.property.ReadOnlyStringWrapper;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
@@ -14,7 +19,6 @@ import javafx.util.converter.IntegerStringConverter;
 
 
 public class AtencionCitaController implements Initializable {
-
     @FXML
     private Button btnGenerarFactura;
 
@@ -108,10 +112,10 @@ public class AtencionCitaController implements Initializable {
         Double precio = Double.parseDouble(txtPrecioAtencion.getText());
         String observaciones = txtAreaObservacionesAtencion.getText();
         if (validarDatosAtencion(precio, observaciones)) {
-                mfm.crearFactura(atencionVeterinaria, precio, observaciones);
-                mostrarMensaje("Notificación cita", "Información de la cita valida", "La factura ha sido generada correctamente", Alert.AlertType.INFORMATION);
-                this.stage.close();
-                menuController.show();
+            mfm.crearFactura(atencionVeterinaria, precio, observaciones);
+            mostrarMensaje("Notificación cita", "Información de la cita valida", "La factura ha sido generada correctamente", Alert.AlertType.INFORMATION);
+            this.stage.close();
+            menuController.show();
         }
     }
 
@@ -141,5 +145,4 @@ public class AtencionCitaController implements Initializable {
         this.stage.close();
         menuController.show();
     }
-
 }

@@ -11,47 +11,47 @@
 <?import javafx.scene.text.Font?>
 
 <BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="500.0" prefWidth="700.0" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.joki.veterinaria.controller.AtencionCitaController">
-   <center>
-      <SplitPane dividerPositions="0.5" orientation="VERTICAL" prefHeight="200.0" prefWidth="160.0" BorderPane.alignment="CENTER">
-        <items>
-          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0" style="-fx-background-color: #f2fdff;">
-               <children>
-                  <Label layoutX="14.0" layoutY="14.0" text="Atención de una mascota" textFill="#228cd8">
-                     <font>
-                        <Font name="Ubuntu Bold Italic" size="18.0" />
-                     </font>
-                  </Label>
-                  <Separator layoutY="42.0" prefHeight="0.0" prefWidth="700.0" style="-fx-background-color: #228cd8;" />
-                  <TextField fx:id="txtNombreAtencion" layoutX="34.0" layoutY="72.0" promptText="Nombre" style="-fx-background-color: transparent; -fx-border-color: #228cd8; -fx-border-width: 0px 0px 2px 0px;" />
-                  <TextField fx:id="txtEdadAtencion" layoutX="264.0" layoutY="72.0" promptText="Edad" style="-fx-background-color: transparent; -fx-border-color: #228cd8; -fx-border-width: 0px 0px 2px 0px;" />
-                  <TextField fx:id="txtSexoAtencion" layoutX="482.0" layoutY="72.0" promptText="Sexo" style="-fx-background-color: transparent; -fx-border-color: #228cd8; -fx-border-width: 0px 0px 2px 0px;" />
-                  <TextField fx:id="txtRazaAtencion" layoutX="149.0" layoutY="151.0" promptText="Raza" style="-fx-background-color: transparent; -fx-border-color: #228cd8; -fx-border-width: 0px 0px 2px 0px;" />
-                  <TextField fx:id="txtTipoMascotaAtencion" layoutX="369.0" layoutY="151.0" promptText="Tipo mascota" style="-fx-background-color: transparent; -fx-border-color: #228cd8; -fx-border-width: 0px 0px 2px 0px;" />
-                  <Button fx:id="btnRegresar" layoutX="598.0" layoutY="12.0" mnemonicParsing="false" onAction="#regresar" style="-fx-background-color: #228cd8;" text="Regresar" textFill="#f2fdff">
-                     <font>
-                        <Font name="Ubuntu Bold Italic" size="14.0" />
-                     </font>
-                  </Button>
-               </children>
-            </AnchorPane>
-          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0" style="-fx-background-color: #228cd8;">
-               <children>
-                  <Label layoutX="14.0" layoutY="14.0" text="Observaciones y costos" textFill="#f2fdff">
-                     <font>
-                        <Font name="Ubuntu Bold Italic" size="18.0" />
-                     </font>
-                  </Label>
-                  <Separator layoutY="44.0" prefHeight="0.0" prefWidth="700.0" style="-fx-background-color: #f2fdff;" />
-                  <TextArea fx:id="txtAreaObservacionesAtencion" layoutX="29.0" layoutY="72.0" prefHeight="129.0" prefWidth="299.0" promptText="Observaciones de la atención de la mascota" />
-                  <TextField fx:id="txtPrecioAtencion" layoutX="401.0" layoutY="79.0" promptText="Costo" style="-fx-background-color: transparent; -fx-border-color: #f2fdff; -fx-border-width: 0px 0px 2px 0px;" />
-                  <Button fx:id="btnGenerarFactura" layoutX="421.0" layoutY="163.0" mnemonicParsing="false" onAction="#generarFactura" style="-fx-background-color: f2fdff;" text="Generar Factura" textFill="#228cd8">
-                     <font>
-                        <Font name="Ubuntu Bold Italic" size="14.0" />
-                     </font>
-                  </Button>
-               </children>
-            </AnchorPane>
-        </items>
-      </SplitPane>
-   </center>
+    <center>
+        <SplitPane dividerPositions="0.5" orientation="VERTICAL" prefHeight="200.0" prefWidth="160.0" BorderPane.alignment="CENTER">
+            <items>
+                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0" style="-fx-background-color: #f2fdff;">
+                    <children>
+                        <Label layoutX="14.0" layoutY="14.0" text="Atención de una mascota" textFill="#228cd8">
+                            <font>
+                                <Font name="Ubuntu Bold Italic" size="18.0" />
+                            </font>
+                        </Label>
+                        <Separator layoutY="42.0" prefHeight="0.0" prefWidth="700.0" style="-fx-background-color: #228cd8;" />
+                        <TextField fx:id="txtNombreAtencion" layoutX="34.0" layoutY="72.0" promptText="Nombre" style="-fx-background-color: transparent; -fx-border-color: #228cd8; -fx-border-width: 0px 0px 2px 0px;" />
+                        <TextField fx:id="txtEdadAtencion" layoutX="264.0" layoutY="72.0" promptText="Edad" style="-fx-background-color: transparent; -fx-border-color: #228cd8; -fx-border-width: 0px 0px 2px 0px;" />
+                        <TextField fx:id="txtSexoAtencion" layoutX="482.0" layoutY="72.0" promptText="Sexo" style="-fx-background-color: transparent; -fx-border-color: #228cd8; -fx-border-width: 0px 0px 2px 0px;" />
+                        <TextField fx:id="txtRazaAtencion" layoutX="149.0" layoutY="151.0" promptText="Raza" style="-fx-background-color: transparent; -fx-border-color: #228cd8; -fx-border-width: 0px 0px 2px 0px;" />
+                        <TextField fx:id="txtTipoMascotaAtencion" layoutX="369.0" layoutY="151.0" promptText="Tipo mascota" style="-fx-background-color: transparent; -fx-border-color: #228cd8; -fx-border-width: 0px 0px 2px 0px;" />
+                        <Button fx:id="btnRegresar" layoutX="598.0" layoutY="12.0" mnemonicParsing="false" onAction="#regresar" style="-fx-background-color: #228cd8;" text="Regresar" textFill="#f2fdff">
+                            <font>
+                                <Font name="Ubuntu Bold Italic" size="14.0" />
+                            </font>
+                        </Button>
+                    </children>
+                </AnchorPane>
+                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0" style="-fx-background-color: #228cd8;">
+                    <children>
+                        <Label layoutX="14.0" layoutY="14.0" text="Observaciones y costos" textFill="#f2fdff">
+                            <font>
+                                <Font name="Ubuntu Bold Italic" size="18.0" />
+                            </font>
+                        </Label>
+                        <Separator layoutY="44.0" prefHeight="0.0" prefWidth="700.0" style="-fx-background-color: #f2fdff;" />
+                        <TextArea fx:id="txtAreaObservacionesAtencion" layoutX="29.0" layoutY="72.0" prefHeight="129.0" prefWidth="299.0" promptText="Observaciones de la atención de la mascota" />
+                        <TextField fx:id="txtPrecioAtencion" layoutX="401.0" layoutY="79.0" promptText="Costo" style="-fx-background-color: transparent; -fx-border-color: #f2fdff; -fx-border-width: 0px 0px 2px 0px;" />
+                        <Button fx:id="btnGenerarFactura" layoutX="421.0" layoutY="163.0" mnemonicParsing="false" onAction="#generarFactura" style="-fx-background-color: f2fdff;" text="Generar Factura" textFill="#228cd8">
+                            <font>
+                                <Font name="Ubuntu Bold Italic" size="14.0" />
+                            </font>
+                        </Button>
+                    </children>
+                </AnchorPane>
+            </items>
+        </SplitPane>
+    </center>
 </BorderPane>
