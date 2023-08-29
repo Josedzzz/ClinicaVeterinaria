@@ -175,6 +175,15 @@ public class ModelFactoryController {
         return clinica.cancelarAtencionVeterinaria(atencionVeterinaria);
     }
 
+    /**
+     * Verifica que la fecha sea la de hoy
+     * @param fecha
+     * @return
+     */
+    public boolean esFechaActual(String fecha) {
+        return clinica.esFechaActual(fecha);
+    }
+
     //FUNCIONES PESTANIA LISTA DE FACTURAS ------------------------------------------------------------
 
     /**

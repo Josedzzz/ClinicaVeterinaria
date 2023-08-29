@@ -895,19 +895,24 @@ public class MenuController implements Initializable {
         if (atencionVeterinariaSeleccion != null) {
             if (atencionVeterinariaSeleccion.getEstadoAtencion().equals(EstadoAtencion.CREADA)) {
                 if (atencionVeterinariaSeleccion.getVeterinario().equals(veterinarioLogin)) {
-                    FXMLLoader loader = new FXMLLoader();
-                    loader.setLocation(Application.class.getResource("/com/joki/veterinaria/AtencionCitaView.fxml"));
-                    BorderPane borderPane = (BorderPane) loader.load();
-                    AtencionCitaController controller = loader.getController();
-                    controller.setAplicacion(application);
-                    Scene scene = new Scene(borderPane);
-                    Stage stage = new Stage();
-                    stage.setTitle("Atender cita veterinaria");
-                    stage.setScene(scene);
-                    controller.init(stage, this, atencionVeterinariaSeleccion);
-                    stage.show();
-                    this.stage.close();
-                    System.out.println(atencionVeterinariaSeleccion.toString());
+                    if (mfm.esFechaActual(atencionVeterinariaSeleccion.getFechaAtencion())) {
+                        FXMLLoader loader = new FXMLLoader();
+                        loader.setLocation(Application.class.getResource("/com/joki/veterinaria/AtencionCitaView.fxml"));
+                        BorderPane borderPane = (BorderPane) loader.load();
+                        AtencionCitaController controller = loader.getController();
+                        controller.setAplicacion(application);
+                        Scene scene = new Scene(borderPane);
+                        Stage stage = new Stage();
+                        stage.setTitle("Atender cita veterinaria");
+                        stage.setScene(scene);
+                        controller.init(stage, this, atencionVeterinariaSeleccion);
+                        stage.show();
+                        this.stage.close();
+                        System.out.println(atencionVeterinariaSeleccion.toString());
+                    } else {
+                        mostrarMensaje("Notificación manejo de citas", "No se puede atender la cita", "Verifique que la fecha de atención sea la fecha actual", Alert.AlertType.WARNING);
+                        System.out.println(atencionVeterinariaSeleccion.getFechaAtencion());
+                    }
                 } else {
                     mostrarMensaje("Notificación manejo de citas", "No se puede atender la cita", "No se inicio sesión como el veterinario encargado", Alert.AlertType.WARNING);
                 }

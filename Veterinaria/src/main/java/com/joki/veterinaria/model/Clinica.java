@@ -359,6 +359,25 @@ public class Clinica {
         return false;
     }
 
+    /**
+     * Verifica que la fecha sea la actual
+     * @param fecha
+     * @return
+     */
+    public boolean esFechaActual(String fecha) {
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+        try {
+            Date fechaStr = sdf.parse(fecha);
+            Date fechaActual = new Date();
+
+            // Comparar considerando el mismo día
+            return sdf.format(fechaStr).equals(sdf.format(fechaActual));
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
     //FUCNIONES PESTANIA LISTA DE FACTURAS -----------------------------------------------------------
 
     /**
