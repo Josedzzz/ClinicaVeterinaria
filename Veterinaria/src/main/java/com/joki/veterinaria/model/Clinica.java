@@ -285,11 +285,16 @@ public class Clinica {
      * @return
      */
     public boolean validarFechaAtencion(String fecha) {
+        String fueSeleccionado = "";
         SimpleDateFormat formatoFecha = new SimpleDateFormat("dd/MM/yyyy");
         formatoFecha.setLenient(false);
         try {
-            formatoFecha.parse(fecha);
-            return true;
+            if(fecha != null) {
+                formatoFecha.parse(fecha);
+                return true;
+            }
+            fueSeleccionado += "No se ha seleccioando ninguna fecha";
+            return false;
         } catch (ParseException e) {
             return false;
         }
@@ -318,6 +323,9 @@ public class Clinica {
         }
         if (mascotaEncontrada == null) {
             fueCreado += "El nombre de la mascota no corresponde a una mascota del dueño\n";
+        }
+        if(fecha == null){
+            fueCreado += "No se ha seleccionado ninguna fecha";
         }
         //Dependiendo de fueCreado se sabe si todos los valores son correctos o no
         if (fueCreado.equals("")) {

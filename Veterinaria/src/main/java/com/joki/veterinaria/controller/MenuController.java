@@ -302,8 +302,9 @@ public class MenuController implements Initializable {
                 System.out.println(newSelection);
                 mascotaSeleccion = newSelection;
                 mascotaSeleccion = tableViewMascota.getSelectionModel().getSelectedItem();
-                llenarCamposMascota(mascotaSeleccion,clienteSeleccion);
+                llenarCamposMascota(mascotaSeleccion);
             }
+            txtCedulaMascota.setDisable(true);
         });
 
 
@@ -524,9 +525,9 @@ public class MenuController implements Initializable {
         String cedula = txtCedulaCliente.getText();
         String telefono = txtTelefonoCliente.getText();
         String direccion = txtDireccionCliente.getText();
-        if(clienteSeleccion != null){
-            if(datosValidosCliente(nombre,correo,cedula,telefono,direccion)){
-                mfm.actualizarCliente(nombre,correo,cedula,telefono,direccion);
+        if (clienteSeleccion != null) {
+            if (datosValidosCliente(nombre, correo, cedula, telefono, direccion)) {
+                mfm.actualizarCliente(nombre, correo, cedula, telefono, direccion);
                 //Actualizo los datos en la interfaz
                 clienteSeleccion.setNombre(nombre);
                 clienteSeleccion.setCorreo(correo);
@@ -535,12 +536,12 @@ public class MenuController implements Initializable {
                 clienteSeleccion.setDireccion(direccion);
                 //Actualizo la table view
                 tableViewCliente.refresh();
-                mostrarMensaje("Notificacion Veterinaria", "Cliente Actualizado","El cliente " + nombre +
+                mostrarMensaje("Notificacion Veterinaria", "Cliente Actualizado", "El cliente " + nombre +
                         " ha sido actualizado", Alert.AlertType.WARNING);
-            }else{
-                mostrarMensaje("Notificacion Veterinaria", "Cliente no seleccionado", "No se ha seleccionado " +
-                        "ningun cliente", Alert.AlertType.WARNING);
             }
+        } else {
+            mostrarMensaje("Notificacion Veterinaria", "Cliente no seleccionado", "No se ha seleccionado " +
+                    "ningun cliente", Alert.AlertType.WARNING);
         }
     }
     /*
@@ -621,24 +622,25 @@ public class MenuController implements Initializable {
             mostrarMensaje("Norificacion Veterinaria", "Cliente eliminado", "El cliente " + nombre +
                     "ha sido eliminado", Alert.AlertType.WARNING );
             limpiarCamposCliente();
+            txtCedulaCliente.setDisable(false);
         }else{
             mostrarMensaje("Notificacion Veterinaria","Cliente eliminado", "Ningun cliente" +
-                    "ha sido seleccionado", Alert.AlertType.WARNING);
+                    " ha sido seleccionado", Alert.AlertType.WARNING);
         }
     }
 
     @FXML
     void mostrarMascotaCliente(ActionEvent event) {
         if(clienteSeleccion != null){
-            for (Mascota mascota : listadoMascotas) {
+            for (Mascota mascota : clienteSeleccion.getListaMascotas()) {
                 mostrarMensaje("Notificacion Veterinaria", "Lista mascotas", mascota.getNombre() +","+ clienteSeleccion.getCedula(), Alert.AlertType.INFORMATION);
                 //recorrer la lista y sacar los atributos importantes y concatenarlos en un string
             }
         }else{
             tableViewMascota.getItems().clear();
-            mostrarMensaje("Notificacion Veterinaria", "Cliente no seleccionado", "No se selcciono " +
-                    "ningun cliente", Alert.AlertType.WARNING);
         }
+        mostrarMensaje("Notificacion Veterinaria", "Cliente no seleccionado", "No se selecciono " +
+                "ningun cliente", Alert.AlertType.WARNING);
     }
 
     //FUNCIONES PARA PESTANIA DE MASCOTAS ------------------------------------------------------------
@@ -658,12 +660,13 @@ public class MenuController implements Initializable {
     /*
    Setea los datos seleccionados en la table view para ser mostrados
     */
-    public void llenarCamposMascota(Mascota mascotaSeleccion, Cliente clienteSeleccion) {
+    public void llenarCamposMascota(Mascota mascotaSeleccion) {
+        txtCedulaMascota.setDisable(false);
         String edadString = Integer.toString(mascotaSeleccion.getEdad());
         txtNombreMascota.setText(mascotaSeleccion.getNombre());
         txtEdadMascota.setText(edadString);
         txtRazaMascota.setText(mascotaSeleccion.getRaza());
-        txtCedulaMascota.setText(clienteSeleccion.getCedula());
+        txtCedulaMascota.setText(mascotaSeleccion.getDuenio().getCedula());
         comboBoxSexoMascota.getSelectionModel().select(mascotaSeleccion.getSexo());
         comboBoxTipoMascota.getSelectionModel().select(mascotaSeleccion.getTipo());
     }
@@ -673,6 +676,7 @@ public class MenuController implements Initializable {
      */
     @FXML
     void nuevaMascota(ActionEvent event) {
+        txtCedulaMascota.setDisable(false);
         txtNombreMascota.setText("");
         txtEdadMascota.setText("");
         txtRazaMascota.setText("");
@@ -688,7 +692,7 @@ public class MenuController implements Initializable {
     @FXML
     void actualizarMascota(ActionEvent event) throws MascotaNoRegistradaException {
         String nombre = txtNombreMascota.getText();
-        int edad = Integer.parseInt(txtEdadMascota.getText());
+        String edad = txtEdadMascota.getText();
         String raza = txtRazaMascota.getText();
         String cedulaCliente = txtCedulaMascota.getText();
 
@@ -697,11 +701,11 @@ public class MenuController implements Initializable {
         TipoMascota tipo = comboBoxTipoMascota.getValue();
         SexoMascota sexo = comboBoxSexoMascota.getValue();
         if(mascotaSeleccion != null){
-            if(datosValidosMascota(nombre, String.valueOf(edad),raza,cedulaCliente,sexo,tipo)){
-                mfm.actualizarMascota(nombre,edad,raza,cliente);
+            if(datosValidosMascota(nombre,edad,raza,cedulaCliente,sexo,tipo)){
+                mfm.actualizarMascota(nombre, Integer.parseInt(edad),raza,cliente);
                 //Actualiza los datos de la interfaz
                 mascotaSeleccion.setNombre(nombre);
-                mascotaSeleccion.setEdad(edad);
+                mascotaSeleccion.setEdad(Integer.parseInt(edad));
                 mascotaSeleccion.setRaza(raza);
                 //Actualiza los datos de la tabla de mascotas
                 tableViewMascota.refresh();
@@ -710,7 +714,7 @@ public class MenuController implements Initializable {
             }
         }else{
             mostrarMensaje("Notificacion Veterinaria","Mascota no seleccionada", "No se ha seleccionado" +
-                    " ningunca mascota", Alert.AlertType.WARNING);
+                    " ningun mascota", Alert.AlertType.WARNING);
         }
     }
 
@@ -755,7 +759,7 @@ public class MenuController implements Initializable {
     void aniadirMascota(ActionEvent event) throws MascotaYaExistenteException {
         txtCedulaMascota.setDisable(false);
         String nombre = txtNombreMascota.getText();
-        int edad = Integer.parseInt(txtEdadMascota.getText());
+        String edad = txtEdadMascota.getText();
         String raza = txtRazaMascota.getText();
         String cedulaDuenioMascota = txtCedulaMascota.getText();
         Cliente duenio = mfm.clinica.obtenerCliente(cedulaDuenioMascota);
@@ -765,13 +769,13 @@ public class MenuController implements Initializable {
             TipoMascota tipo = comboBoxTipoMascota.getValue();
             SexoMascota sexo = comboBoxSexoMascota.getValue();
 
-            if (datosValidosMascota(nombre, String.valueOf(edad), raza, cedulaDuenioMascota, sexo, tipo)) {
-                crearMascota(nombre, edad, sexo, raza, tipo, duenio);
+            if (datosValidosMascota(nombre, edad, raza, cedulaDuenioMascota, sexo, tipo)) {
+                crearMascota(nombre, Integer.parseInt(edad), sexo, raza, tipo, duenio);
                 limpiarCamposMascota();
                 tableViewCliente.getSelectionModel().clearSelection();
             }
         }else{
-            mostrarMensaje("Error dueño", "Error dueño", "La cédula del cliente no existe", Alert.AlertType.ERROR);
+            mostrarMensaje("Notificacion veterinaria", "Error mascota", "Los datos son invalidos ", Alert.AlertType.ERROR);
         }
     }
 
@@ -791,7 +795,7 @@ public class MenuController implements Initializable {
             }
         }catch (MascotaYaExistenteException e){
             mostrarMensaje("Notificacion Mascota","Mascota no creada", "La mascota " + nombre +
-                    " Ya exsite", Alert.AlertType.WARNING);
+                    " ya exsite", Alert.AlertType.WARNING);
         }
 
     }
@@ -814,7 +818,6 @@ public class MenuController implements Initializable {
             mostrarMensaje("Notificacion Veterinaria","Mascota eliminada", "Ninguna mascota " +
                     " ha sido seleccionada", Alert.AlertType.WARNING);
         }
-        listadoMascotas.remove(mascotaSeleccion);
     }
 
     //FUNCIONES PARA PESTANIA DE ATENCION VETERINARIA ------------------------------------------------

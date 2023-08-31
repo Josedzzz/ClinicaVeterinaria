@@ -262,6 +262,4 @@ public class ModelFactoryController {
         ArrayList<Factura> listadoMascotaHistorial = clinica.getHistorialMascota(mascotaHistorial);
         return listadoMascotaHistorial;
     }
-
-
 }
